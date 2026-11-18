@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نبذة عن المشروع - AuraCode</title>
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --card-bg: #1e293b;
+      --accent-blue: #38bdf8;
+      --accent-green: #10b981;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+    }
+
+    html.light {
+      --bg-dark: #f1f5f9;
+      --card-bg: #ffffff;
+      --accent-blue: #0284c7;
+      --accent-green: #059669;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #cbd5e1;
+    }
+
+    * {
+      box-sizing: border-box;
+      transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 25px 15px;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 16px;
+      border-radius: 8px;
+      background: var(--bg-dark);
+      color: var(--accent-blue);
+      border: 1px solid var(--border-color);
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .back-btn:hover {
+      border-color: var(--accent-blue);
+    }
+
+    .theme-btn {
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-dark);
+      color: var(--text-main);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    h1 {
+      margin: 0 0 10px 0;
+      color: var(--accent-blue);
+      font-size: 25px;
+    }
+
+    p {
+      color: var(--text-muted);
+      line-height: 1.75;
+      font-size: 15px;
+      margin: 0 0 16px 0;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .feature-card {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .feature-card h3 {
+      margin: 0 0 8px 0;
+      color: var(--accent-green);
+      font-size: 16px;
+    }
+
+    .feature-card p {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="top-bar">
+      {% if back_target == 'dashboard' %}
+        <a href="{{ url_for('dashboard', nickname=back_nickname) if back_nickname else url_for('dashboard') }}" class="back-btn">← العودة إلى الصفحة الرئيسية</a>
+      {% else %}
+        <a href="{{ url_for('login') }}" class="back-btn">← العودة إلى تسجيل الدخول</a>
+      {% endif %}
+
+      <button type="button" class="theme-btn" onclick="toggleTheme()">🌓 تبديل المظهر</button>
+    </div>
+
+    <h1>🔍 نبذة عن المشروع - AuraCode</h1>
+    <p>
+      منصة <strong>AuraCode</strong> هي بيئة تعليمية وتفاعلية تجمع بين المجموعات الدراسية، بيئات البرمجة والتطوير، نظام التركيز والزراعة لكسب النقاط، والمتجر التقني، بالإضافة إلى المساعد الذكي.
+    </p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <h3>👥 المجموعات والنقاشات</h3>
+        <p>انضم إلى مجموعات متخصصة وتواصل مع الأعضاء والمشرفين في بيئة منظمة.</p>
+      </div>
+      <div class="feature-card">
+        <h3>🌱 الحظيرة والنقاط</h3>
+        <p>حوّل وقت دراستك وتركيزك إلى نمو نباتات في الحظيرة الخضراء واكسب النقاط.</p>
+      </div>
+      <div class="feature-card">
+        <h3>💻 بيئة التطوير والمساعد الذكي</h3>
+        <p>جرّب الأكواد البرمجية واستفد من أدوات المنصة والمساعد الذكي لتسريع تعلمك.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme_mode') || 'dark';
+      document.getElementById('htmlRoot').className = savedTheme;
+    });
+
+    function toggleTheme() {
+      const root = document.getElementById('htmlRoot');
+      const nextTheme = root.classList.contains('light') ? 'dark' : 'light';
+      root.className = nextTheme;
+      localStorage.setItem('theme_mode', nextTheme);
+    }
+  </script>
+</body>
+</html>

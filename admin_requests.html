@@ -1,0 +1,2099 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم الشاملة - عالم E.A.E.A</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --container-bg: #1e293b;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-blue: #38bdf8;
+            --accent-purple: #8b5cf6;
+            --border-color: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        html.light {
+            --bg-dark: #f1f5f9;
+            --container-bg: #ffffff;
+            --accent-green: #059669;
+            --accent-red: #dc2626;
+            --accent-blue: #0284c7;
+            --accent-purple: #7c3aed;
+            --border-color: #cbd5e1;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        * {
+            transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease !important;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            direction: rtl;
+            background-image: linear-gradient(rgba(30, 41, 59, 0.4) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(30, 41, 59, 0.4) 1px, transparent 1px);
+            background-size: 20px 20px;
+            min-height: 100vh;
+        }
+
+        /* شريط التبويبات العلوي للتنقل السريع */
+        .admin-top-tabs {
+            position: sticky;
+            top: 10px;
+            z-index: 1500;
+            max-width: 1050px;
+            margin: 0 auto 18px auto;
+            background: rgba(30, 41, 59, 0.92);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            overflow-x: auto;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+            scrollbar-width: thin;
+        }
+
+        html.light .admin-top-tabs {
+            background: rgba(255, 255, 255, 0.94);
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+        }
+
+        .admin-tab-link {
+            text-decoration: none;
+            color: var(--text-muted);
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            padding: 7px 13px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: bold;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .admin-tab-link:hover {
+            color: var(--text-main);
+            border-color: var(--accent-blue);
+            transform: translateY(-1px);
+        }
+
+        .admin-tab-link.active {
+            background: linear-gradient(135deg, #0284c7, #38bdf8);
+            color: #ffffff;
+            border-color: transparent;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.45);
+        }
+
+        .admin-tab-badge {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
+            padding: 1px 7px;
+            border-radius: 999px;
+            font-size: 11px;
+        }
+
+        .admin-tab-link.active .admin-tab-badge {
+            background: rgba(255, 255, 255, 0.25);
+            color: #ffffff;
+        }
+
+        .section-anchor {
+            scroll-margin-top: 85px;
+        }
+
+        #adminAuthOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-card {
+            background: var(--container-bg);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 15px auto 30px auto;
+            background: var(--container-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
+        }
+
+        .header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        h2, h3, h4 {
+            color: var(--accent-blue);
+            margin-top: 0;
+            text-shadow: 0 0 8px rgba(56, 189, 248, 0.3);
+        }
+
+        p { color: var(--text-muted); }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: right;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: var(--bg-dark);
+            color: var(--accent-blue);
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(15, 23, 42, 0.15);
+        }
+
+        .btn-approve {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            padding: 6px 12px;
+            text-decoration: none;
+            border-radius: 6px;
+            display: inline-block;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .btn-edit {
+            background: linear-gradient(135deg, #0284c7, #38bdf8);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 12px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-reject, .btn-delete {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            color: white;
+            padding: 6px 12px;
+            text-decoration: none;
+            border-radius: 6px;
+            display: inline-block;
+            font-weight: bold;
+            font-size: 12px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .reply-section {
+            margin-top: 8px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .reply-section input {
+            flex: 1;
+            padding: 5px 8px;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 4px;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .btn-reply {
+            background: var(--accent-blue);
+            color: #0f172a;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .section-box {
+            margin-top: 40px;
+            background: var(--bg-dark);
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-main);
+            font-size: 14px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group input[type="datetime-local"],
+        .form-group textarea,
+        .form-group input[type="password"],
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 6px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .btn-submit-group {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .welcome-notif-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .join-q-item-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .quiz-question-builder-card {
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 14px;
+            margin-top: 12px;
+        }
+
+        .quiz-options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .group-thumb-preview {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-blue);
+            background: var(--bg-dark);
+        }
+
+        .back-link {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        .switch-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 46px;
+            height: 24px;
+        }
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #475569;
+            transition: 0.4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider { background-color: var(--accent-blue); }
+        input:checked + .slider:before { transform: translateX(22px); }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-card {
+            background: var(--container-bg);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        }
+    </style>
+</head>
+<body>
+
+{% if not admin_authenticated %}
+<div id="adminAuthOverlay">
+    <div class="auth-card">
+        <h3>🔐 بوابة أمن المشرف</h3>
+        <p style="font-size: 13px;">يرجى إدخال كلمة مرور المشرف للوصول إلى لوحة التحكم الشاملة:</p>
+        {% if admin_error %}
+            <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #f87171; padding: 8px; border-radius: 6px; font-size: 13px; margin-top: 10px;">
+                {{ admin_error }}
+            </div>
+        {% endif %}
+        <form action="{{ url_for('admin_login') }}" method="POST" style="margin-top: 15px;">
+            <div class="form-group">
+                <input type="password" name="admin_password" placeholder="كلمة المرور..." required autofocus style="text-align: center;">
+            </div>
+            <button type="submit" class="btn-submit-group" style="width: 100%;">دخول اللوحة 🚀</button>
+        </form>
+        <div style="margin-top: 15px;">
+            <a href="{{ url_for('login') }}" class="back-link">← العودة إلى صفحة تسجيل الدخول</a>
+        </div>
+    </div>
+</div>
+{% else %}
+
+<div id="editGroupModal" class="modal-overlay">
+    <div class="modal-card">
+        <h3>✏️ تعديل بيانات المجموعة</h3>
+        <form action="/dashboard/admin/edit_group" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="group_id" id="editGroupId">
+            
+            <div class="form-group">
+                <label>اسم المجموعة الجديد:</label>
+                <input type="text" name="group_name" id="editGroupName" required>
+            </div>
+
+            <div class="form-group">
+                <label>وصف المجموعة الجديد:</label>
+                <textarea name="group_desc" id="editGroupDesc" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>تغيير صورة / أيقونة المجموعة (تظهر في الرئيسية وعرض المجموعات):</label>
+                <input type="file" name="group_icon" id="editGroupIconInput" accept="image/*" style="color: var(--text-main);" onchange="previewGroupFile(this, 'editGroupIconPreview')">
+                <div style="margin-top: 10px; display: flex; align-items: center; gap: 10px;">
+                    <img id="editGroupIconPreview" src="/static/default_group.png" alt="معاينة الصورة" class="group-thumb-preview" onerror="this.src='/static/default_group.png'">
+                    <span style="font-size: 12px; color: var(--text-muted);">معاينة صورة المجموعة الحالية / الجديدة</span>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button type="submit" class="btn-submit-group" style="flex: 1;">حفظ التعديلات ✅</button>
+                <button type="button" class="btn-delete" onclick="closeEditModal()" style="flex: 1;">إلغاء ❌</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="editRefModal" class="modal-overlay">
+    <div class="modal-card">
+        <h3>✏️ تعديل المرجع</h3>
+        <form action="/dashboard/admin/edit_reference" method="POST">
+            <input type="hidden" name="ref_id" id="editRefId">
+
+            <div class="form-group">
+                <label>المجموعة التابعة لها:</label>
+                <select name="group_id" id="editRefGroupId">
+                    <option value="">عام / جميع المجموعات</option>
+                    {% for g in groups_list %}
+                        <option value="{{ g[0] }}">{{ g[1] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>عنوان المرجع:</label>
+                <input type="text" name="ref_title" id="editRefTitle" required>
+            </div>
+
+            <div class="form-group">
+                <label>وصف المرجع:</label>
+                <textarea name="ref_desc" id="editRefDesc" rows="2"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>رابط التحميل أو الموقع:</label>
+                <input type="text" name="ref_link" id="editRefLink">
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button type="submit" class="btn-submit-group" style="flex: 1;">حفظ التعديلات ✅</button>
+                <button type="button" class="btn-delete" onclick="closeEditRefModal()" style="flex: 1;">إلغاء ❌</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="editMarketItemModal" class="modal-overlay">
+    <div class="modal-card">
+        <h3>✏️ تعديل عنصر الشراء والبيع</h3>
+        <input type="hidden" id="editMarketItemId">
+        <div class="form-group">
+            <label>اسم الأداة / المنتج:</label>
+            <input type="text" id="editMarketItemName" required>
+        </div>
+        <div class="form-group">
+            <label>اسم البائع:</label>
+            <input type="text" id="editMarketItemSeller" required>
+        </div>
+        <div class="form-group">
+            <label>وصف العنصر:</label>
+            <textarea id="editMarketItemDesc" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+            <label>السعر (E-Coin):</label>
+            <input type="number" id="editMarketItemPrice" min="1" required>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button type="button" class="btn-submit-group" style="flex: 1;" onclick="saveEditedMarketItem()">حفظ التعديلات ✅</button>
+            <button type="button" class="btn-delete" style="flex: 1;" onclick="closeEditMarketItemModal()">إلغاء ❌</button>
+        </div>
+    </div>
+</div>
+
+<nav class="admin-top-tabs" aria-label="التنقل بين أقسام لوحة المدير">
+    <a href="#sec-welcome" class="admin-tab-link active" onclick="activateAdminTab(this)">👋 الترحيب</a>
+    <a href="#sec-join-questions" class="admin-tab-link" onclick="activateAdminTab(this)">❓ أسئلة المقابلة</a>
+    <a href="#sec-quiz" class="admin-tab-link" onclick="activateAdminTab(this)">🎯 الكويز المفاجئ</a>
+    <a href="#sec-market" class="admin-tab-link" onclick="activateAdminTab(this)">🛒 الشراء والبيع</a>
+    <a href="#sec-activity" class="admin-tab-link" onclick="activateAdminTab(this)">📊 النشاط</a>
+    <a href="#sec-requests" class="admin-tab-link" onclick="activateAdminTab(this)">
+        📌 الطلبات <span class="admin-tab-badge">{{ requests_list|length }}</span>
+    </a>
+    <a href="#sec-groups" class="admin-tab-link" onclick="activateAdminTab(this)">🛠️ المجموعات</a>
+    <a href="#sec-members" class="admin-tab-link" onclick="activateAdminTab(this)">👥 الأعضاء</a>
+    <a href="#sec-references" class="admin-tab-link" onclick="activateAdminTab(this)">📚 المراجع</a>
+    <a href="#sec-ratings" class="admin-tab-link" onclick="activateAdminTab(this)">
+        ⭐ التقييمات <span class="admin-tab-badge">{{ ratings_list|length }}</span>
+    </a>
+    <a href="#sec-add-group" class="admin-tab-link" onclick="activateAdminTab(this)">➕ مجموعة جديدة</a>
+</nav>
+
+<div class="container" id="adminMainContainer">
+    <div class="header-flex">
+        <a href="{{ url_for('login') }}" class="back-link">← العودة إلى صفحة تسجيل الدخول</a>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div class="switch-container">
+                <span style="font-size: 13px; font-weight: bold;">🌙 المظهر</span>
+                <label class="switch">
+                    <input type="checkbox" id="themeSwitch" onchange="toggleTheme()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <a href="{{ url_for('admin_logout') }}" class="btn-delete" style="padding: 8px 14px;">قفل اللوحة وخروج 🔒</a>
+        </div>
+    </div>
+
+    <h2>⚡ لوحة التحكم الشاملة والمراقبة - عالم E.A.E.A</h2>
+    <p>تحكم كامل في طلبات الانضمام، أسئلة المقابلة والقبول، الشراء والبيع، المجموعات وصورها، الأعضاء، الكويز المفاجئ، مع متابعة أوقات وأنشطة المستخدمين في المنصة.</p>
+
+    <div id="sec-welcome" class="section-box section-anchor" style="margin-top: 20px; border-color: var(--accent-purple);">
+        <h3>👋 تعديل الترحيب وإضافة وتعديل الإشعارات الترحيبية</h3>
+
+        <div class="form-group">
+            <label>عنوان رسالة الترحيب:</label>
+            <input type="text" id="adminWelcomeTitleInput" placeholder="مثال: أهلاً بك مجدداً في عالم E.A.E.A! 🚀">
+        </div>
+
+        <div class="form-group">
+            <label>نص الترحيب الفرعي:</label>
+            <input type="text" id="adminWelcomeSubtitleInput" placeholder="مثال: استمر في كتابة الأكواد وتطوير مهاراتك التقنية...">
+        </div>
+
+        <button type="button" class="btn-submit-group" onclick="saveWelcomeMessage()">💾 حفظ تعديل الترحيب</button>
+
+        <div style="margin-top: 22px; padding-top: 16px; border-top: 1px dashed var(--border-color);">
+            <div class="form-group">
+                <label>إضافة إشعار ترحيبي جديد أو تعديل إشعار حالي:</label>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <input type="text" id="welcomeNotifTextInput" style="flex: 1; min-width: 220px;" placeholder="اكتب نص الإشعار الترحيبي...">
+                    <button type="button" id="welcomeNotifSaveBtn" class="btn-edit" style="background: var(--accent-purple); padding: 9px 16px;" onclick="saveWelcomeNotif()">➕ إضافة إشعار ترحيبي</button>
+                    <button type="button" id="welcomeNotifCancelBtn" class="btn-delete" style="display: none; padding: 9px 14px;" onclick="cancelWelcomeNotifEdit()">إلغاء</button>
+                </div>
+            </div>
+
+            <div id="welcomeNotificationsContainer"></div>
+        </div>
+
+        <div id="welcomeManagerFeedback" style="margin-top: 10px; font-size: 13px; font-weight: bold; color: var(--accent-green);"></div>
+    </div>
+
+    <!-- قسم إدارة وإضافة وتعديل أسئلة المقابلة والقبول -->
+    <div id="sec-join-questions" class="section-box section-anchor" style="margin-top: 20px; border-color: var(--accent-blue);">
+        <h3>❓ إدارة وإضافة وتعديل أسئلة المقابلة والقبول في المجموعات</h3>
+        <p style="font-size: 13px;">اختر المجموعة لإضافة سؤال مقابلة جديد أو تعديل أو حذف الأسئلة التي تظهر للأعضاء عند المقابلة وطلب الانضمام.</p>
+
+        <div class="form-group">
+            <label>اختر المجموعة:</label>
+            <select id="joinQuestionGroupSelect" onchange="onJoinQuestionGroupChange()">
+                <option value="">-- اختر المجموعة --</option>
+                {% for g in groups_list %}
+                    <option value="{{ g[0] }}">{{ g[1] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>نص سؤال المقابلة:</label>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <input type="text" id="joinQuestionTextInput" style="flex: 1; min-width: 220px;" placeholder="مثال: ما هدفك من الانضمام إلى هذه المجموعة؟" onkeydown="if(event.key==='Enter'){event.preventDefault();saveJoinQuestionItem();}">
+                <button type="button" id="joinQuestionSaveBtn" class="btn-edit" style="padding: 9px 16px;" onclick="saveJoinQuestionItem()">➕ إضافة سؤال</button>
+                <button type="button" id="joinQuestionCancelBtn" class="btn-delete" style="display: none; padding: 9px 14px;" onclick="cancelJoinQuestionEdit()">إلغاء</button>
+            </div>
+        </div>
+
+        <div id="joinQuestionsListContainer"></div>
+
+        <div style="margin-top: 16px;">
+            <button type="button" class="btn-submit-group" onclick="syncJoinQuestionsToServer()">💾 حفظ أسئلة المقابلة للمستخدمين</button>
+        </div>
+
+        <div id="joinQuestionsFeedback" style="margin-top: 10px; font-size: 13px; font-weight: bold; color: var(--accent-green);"></div>
+    </div>
+
+    <!-- قسم إدارة وإطلاق الكويز المفاجئ -->
+    <div id="sec-quiz" class="section-box section-anchor" style="margin-top: 20px; border-color: var(--accent-purple);">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <h3 style="margin: 0; color: #c4b5fd;">🎯 إدارة الكويز المفاجئ (Surprise Quiz)</h3>
+            <label style="display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: bold; cursor: pointer;">
+                <input type="checkbox" id="quizActiveCheckbox">
+                <span>تفعيل الكويز للمستخدمين الآن</span>
+            </label>
+        </div>
+        <p style="margin-top: 8px; font-size: 13px;">أنشئ أسئلة اختيار من متعدد وحدد المدة الزمنية وموعد البدء (لتنبيه المستخدم قبل الكويز بساعة) ومكافأة عملات <strong>E-Coin</strong>.</p>
+
+        <div class="quiz-options-grid">
+            <div class="form-group" style="margin-bottom: 0;">
+                <label>عنوان الكويز:</label>
+                <input type="text" id="quizTitleInput" placeholder="مثال: اختبار سريع في أساسيات الشبكات والأمن">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label>مدة الكويز (بالثواني):</label>
+                <input type="number" id="quizDurationInput" min="15" max="1800" value="120">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label>مكافأة النجاح (E-Coin):</label>
+                <input type="number" id="quizRewardInput" min="0" max="1000" value="25">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label>موعد بدء الكويز (اختياري):</label>
+                <input type="datetime-local" id="quizScheduledTimeInput">
+            </div>
+        </div>
+
+        <div id="quizQuestionsBuilderContainer" style="margin-top: 14px;"></div>
+
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px;">
+            <button type="button" class="btn-edit" style="background: var(--accent-blue); padding: 9px 16px;" onclick="addQuizQuestionCard()">➕ إضافة سؤال جديد</button>
+            <button type="button" class="btn-submit-group" style="background: linear-gradient(135deg, #7c3aed, #8b5cf6);" onclick="saveSurpriseQuizConfig()">🚀 حفظ ونشر الكويز المفاجئ</button>
+            <button type="button" class="btn-delete" style="padding: 9px 16px;" onclick="disableSurpriseQuiz()">⏸️ إيقاف الكويز</button>
+        </div>
+
+        <div id="quizManagerFeedback" style="margin-top: 12px; font-size: 13px; font-weight: bold; color: var(--accent-green);"></div>
+    </div>
+
+    <!-- قسم إدارة الشراء والبيع للمدير (إضافة، تعديل، حذف) -->
+    <div id="sec-market" class="section-box section-anchor" style="margin-top: 20px; border-color: var(--accent-green);">
+        <h3>🛒 إدارة عناصر الشراء والبيع (إضافة، تعديل، حذف)</h3>
+        <p style="font-size: 13px;">تحكم كامل في الأدوات والمنتجات المعروضة للبيع والشراء مقابل <strong>E-Coin</strong> في سوق المنصة.</p>
+
+        <div class="quiz-options-grid">
+            <div class="form-group" style="margin-bottom: 0;">
+                <label>اسم الأداة / المنتج:</label>
+                <input type="text" id="adminMarketNameInput" placeholder="مثال: أداة فحص الثغرات">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label>اسم البائع:</label>
+                <input type="text" id="adminMarketSellerInput" value="المشرف العام">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label>السعر (E-Coin):</label>
+                <input type="number" id="adminMarketPriceInput" min="1" placeholder="50">
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 12px;">
+            <label>وصف العنصر:</label>
+            <input type="text" id="adminMarketDescInput" placeholder="وصف مختصر للعنصر...">
+        </div>
+
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button type="button" class="btn-submit-group" onclick="addAdminMarketItem()">➕ إضافة عنصر للشراء والبيع</button>
+            <button type="button" class="btn-reply" onclick="renderAdminMarketTable()">🔄 تحديث القائمة</button>
+        </div>
+
+        <div id="adminMarketFeedback" style="margin-top: 10px; font-size: 13px; font-weight: bold; color: var(--accent-green);"></div>
+        <div id="adminMarketTableContainer" style="margin-top: 14px;"></div>
+    </div>
+
+    <div id="sec-activity" class="section-box section-anchor" style="margin-top: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <h3 style="margin: 0;">📊 سجل نشاط المستخدمين (عناوين IP وأوقات الدخول والخروج ومدة الجلوس)</h3>
+            <button type="button" class="btn-reply" onclick="refreshUsersActivityTable()">🔄 تحديث السجل</button>
+        </div>
+        <div id="usersActivityLiveContainer" style="margin-top: 12px;">
+            {% if users_activity_list %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الاسم الحقيقي</th>
+                            <th>اللقب</th>
+                            <th>عنوان IP الجهاز</th>
+                            <th>وقت آخر دخول</th>
+                            <th>وقت آخر خروج</th>
+                            <th>مدة الجلوس في الموقع</th>
+                            <th>وقت البقاء / التركيز (ساعات)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usr in users_activity_list %}
+                        <tr>
+                            <td><strong>{{ usr[1] }}</strong></td>
+                            <td style="color: var(--accent-blue);">{{ usr[2] }}</td>
+                            <td><code style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); padding: 2px 6px; border-radius: 4px;">{{ usr[5] if usr|length > 5 and usr[5] else 'غير محدد' }}</code></td>
+                            <td>{{ usr[6] if usr|length > 6 and usr[6] else 'لم يسجل دخول بعد' }}</td>
+                            <td>{{ usr[7] if usr|length > 7 and usr[7] else 'متصل الآن / لم يخرج بعد' }}</td>
+                            <td><span style="color: var(--accent-blue); font-weight: bold;">⏱️ {{ usr[8] if usr|length > 8 and usr[8] else 'غير محسوب' }}</span></td>
+                            <td><span style="color: var(--accent-green); font-weight: bold;">⏳ {{ usr[4] if usr|length > 4 and usr[4] is not none else 0 }} ساعة</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div style="color: var(--text-muted); text-align: center; padding: 15px;">لا توجد سجلات مستخدمين متاحة حالياً.</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="sec-requests" class="section-box section-anchor">
+        <h3>📌 طلبات الانضمام المعلقة</h3>
+        {% if requests_list %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>اسم المستخدم</th>
+                        <th>المجموعة</th>
+                        <th>الإجابات والرد الفوري</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for req in requests_list %}
+                    <tr>
+                        <td><strong>👤 {{ req[2] }}</strong></td>
+                        <td>📂 {{ req[1] }}</td>
+                        <td>
+                            <div style="margin-bottom: 5px; color: var(--text-muted);">{{ req[3] }}</div>
+                            <div class="reply-section">
+                                <input type="text" placeholder="اكتب ردّاً أو ملاحظة..." id="reply-{{ req[0] }}">
+                                <button type="button" class="btn-reply" onclick="sendReply('{{ req[0] }}')">إرسال 💬</button>
+                            </div>
+                        </td>
+                        <td>
+                            <div style="display: flex; gap: 5px;">
+                                <a href="{{ url_for('approve_request', request_id=req[0]) }}" class="btn-approve">موافقة ✅</a>
+                                <a href="{{ url_for('reject_request', request_id=req[0]) }}" class="btn-reject">رفض ❌</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div style="color: var(--text-muted); text-align: center; padding: 15px;">لا توجد طلبات انضمام معلقة حالياً.</div>
+        {% endif %}
+    </div>
+
+    <div id="sec-groups" class="section-box section-anchor">
+        <h3>🛠️ إدارة وتعديل المجموعات الحالية وصورها</h3>
+        {% if groups_list %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>صورة / اسم المجموعة</th>
+                        <th>الوصف</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for g in groups_list %}
+                    {% set raw_icon = g[3] if g|length > 3 and g[3] else 'default_group.png' %}
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <img src="{{ raw_icon if raw_icon.startswith('/') or raw_icon.startswith('http') else url_for('static', filename=raw_icon) }}"
+                                     alt="{{ g[1] }}"
+                                     class="group-thumb-preview group-row-img"
+                                     data-raw-icon="{{ raw_icon }}"
+                                     onerror="this.src='/static/default_group.png'">
+                                <strong class="group-row-name">{{ g[1] }}</strong>
+                            </div>
+                        </td>
+                        <td class="group-row-desc">{{ g[2] }}</td>
+                        <td>
+                            <div style="display: flex; gap: 6px;">
+                                <button type="button" class="btn-edit"
+                                    data-group-id="{{ g[0] }}"
+                                    onclick="openEditModalFromBtn(this)">تعديل ✏️</button>
+                                <a href="{{ url_for('delete_group', group_id=g[0]) }}" class="btn-delete" onclick="return confirm('هل أنت متأكد من حذف هذه المجموعة نهائياً؟');">حذف 🗑️</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div style="color: var(--text-muted); text-align: center; padding: 15px;">لا توجد مجموعات مضافة.</div>
+        {% endif %}
+    </div>
+
+    <div id="sec-members" class="section-box section-anchor">
+        <h3>👥 إدارة أعضاء المجموعات (معلومات العضو التفصيلية)</h3>
+        {% if members_list %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>الاسم الحقيقي</th>
+                        <th>اللقب</th>
+                        <th>البريد الإلكتروني</th>
+                        <th>المجموعة المنضم إليها</th>
+                        <th>الإجراء</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in members_list %}
+                    <tr>
+                        <td><strong>{{ m[3] if m[3] else m[1] }}</strong></td>
+                        <td style="color: var(--accent-blue);">{{ m[1] }}</td>
+                        <td style="color: var(--text-muted);">{{ m[4] if m[4] else 'غير مسجل' }}</td>
+                        <td><span style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); padding: 3px 8px; border-radius: 4px; font-size: 13px;">{{ m[2] }}</span></td>
+                        <td>
+                            <a href="{{ url_for('remove_member', member_id=m[0]) }}" class="btn-reject" onclick="return confirm('هل تريد حقاً إزالة هذا المستخدم من المجموعة؟');">إزالة من المجموعة 🚫</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div style="color: var(--text-muted); text-align: center; padding: 15px;">لا يوجد أعضاء لعرضهم أو إزالتهم.</div>
+        {% endif %}
+    </div>
+
+    <div id="sec-references" class="section-box section-anchor" style="border-color: var(--accent-blue);">
+        <h3>📚 إدارة وإضافة المراجع والمصادر التعليمية</h3>
+        <form action="/dashboard/admin/add_reference" method="POST" style="margin-bottom: 25px;">
+            <div class="form-group">
+                <label>المجموعة التابعة لها:</label>
+                <select name="group_id" required>
+                    <option value="">-- اختر المجموعة --</option>
+                    {% for g in groups_list %}
+                        <option value="{{ g[0] }}">{{ g[1] }}</option>
+                    {% endfor %}
+                    <option value="">عام / جميع المجموعات</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>عنوان المرجع:</label>
+                <input type="text" name="ref_title" placeholder="أدخل عنوان المرجع أو الكتاب..." required>
+            </div>
+            <div class="form-group">
+                <label>وصف المرجع:</label>
+                <textarea name="ref_desc" rows="2" placeholder="وصف مختصر للمرجع..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>رابط التحميل أو الموقع:</label>
+                <input type="text" name="ref_link" placeholder="https://...">
+            </div>
+            <button type="submit" class="btn-submit-group">إضافة المرجع لتبويب المراجع 📖</button>
+        </form>
+
+        <h4 style="color: var(--text-main); margin-top: 20px;">المراجع الحالية في تبويب المراجع:</h4>
+        <div id="adminReferencesLiveContainer">
+            {% if references_list %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>المجموعة</th>
+                            <th>العنوان</th>
+                            <th>الوصف</th>
+                            <th>الرابط</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ref in references_list %}
+                        <tr>
+                            <td><span style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); padding: 3px 8px; border-radius: 4px; font-size: 12px;">{{ ref[5] if ref|length > 5 else 'عام / جميع المجموعات' }}</span></td>
+                            <td><strong>{{ ref[1] }}</strong></td>
+                            <td>{{ ref[2] }}</td>
+                            <td><a href="{{ ref[3] }}" target="_blank" style="color: var(--accent-blue);">رابط المرجع 🔗</a></td>
+                            <td>
+                                <div style="display: flex; gap: 6px;">
+                                    <button type="button" class="btn-edit"
+                                        data-id="{{ ref[0] }}"
+                                        data-group-id="{{ ref[4] if ref|length > 4 and ref[4] is not none else '' }}"
+                                        data-title="{{ ref[1] }}"
+                                        data-desc="{{ ref[2] or '' }}"
+                                        data-link="{{ ref[3] or '' }}"
+                                        onclick="openEditRefModalFromBtn(this)">تعديل ✏️</button>
+                                    <a href="{{ url_for('delete_reference', ref_id=ref[0]) }}" class="btn-delete" onclick="return confirm('هل أنت متأكد من حذف هذا المرجع؟');">حذف 🗑️</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div style="color: var(--text-muted); text-align: center; padding: 15px;">لا توجد مراجع مضافة حتى الآن.</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="sec-ratings" class="section-box section-anchor" style="border-color: var(--accent-green);">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <h3 style="margin: 0;">⭐ تقييمات وآراء الأعضاء في المنصة ({{ ratings_list|length }})</h3>
+            <button type="button" class="btn-reply" onclick="window.location.reload()">🔄 تحديث التقييمات</button>
+        </div>
+        {% if ratings_list %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>اسم المستخدم (اللقب)</th>
+                        <th>التقييم</th>
+                        <th>الملاحظات والاقتراحات</th>
+                        <th>وقت الإرسال</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rate in ratings_list %}
+                    <tr>
+                        <td><strong>{{ rate[1] }}</strong></td>
+                        <td style="color: #fbbf24;">{{ '⭐' * (rate[2]|int) }} ({{ rate[2] }}/5)</td>
+                        <td>{{ rate[3] if rate[3] else 'بدون ملاحظات' }}</td>
+                        <td><small style="color: var(--text-muted);">{{ rate[4] }}</small></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div style="color: var(--text-muted); text-align: center; padding: 15px;">لم يتم استلام أي تقييمات من الأعضاء حتى الآن.</div>
+        {% endif %}
+    </div>
+
+    <div id="sec-add-group" class="section-box section-anchor">
+        <h3>➕ إضافة مجموعة جديدة وتخصيص صورتها</h3>
+        <form action="/dashboard/admin/add_group" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>اسم المجموعة:</label>
+                <input type="text" name="group_name" required placeholder="مثال: مجموعة الأمن السيبراني المتقدم">
+            </div>
+
+            <div class="form-group">
+                <label>وصف المجموعة:</label>
+                <textarea name="group_desc" rows="3" required placeholder="اكتب نبذة مختصرة عن المجموعة..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>صورة / أيقونة المجموعة (تظهر في الصفحة الرئيسية وعرض المجموعات):</label>
+                <input type="file" name="group_icon" id="addGroupIconInput" accept="image/*" style="color: var(--text-main);" onchange="previewGroupFile(this, 'addGroupIconPreview')">
+                <div style="margin-top: 10px; display: flex; align-items: center; gap: 10px;">
+                    <img id="addGroupIconPreview" src="/static/default_group.png" alt="معاينة صورة المجموعة الجديدة" class="group-thumb-preview" onerror="this.src='/static/default_group.png'">
+                    <span style="font-size: 12px; color: var(--text-muted);">معاينة صورة المجموعة قبل النشر</span>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit-group">إنشاء المجموعة ونشرها 🚀</button>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<script>
+    const WELCOME_CFG_KEY = 'auracode_welcome_config';
+    const QUIZ_CFG_KEY = 'auracode_surprise_quiz_config';
+    const JOIN_QUESTIONS_KEY = 'auracode_interview_questions';
+    const GROUP_MEDIA_MAP_KEY = 'auracode_group_media_map';
+    const MARKET_ITEMS_KEY = 'market_items_list';
+    let editingWelcomeNotifId = null;
+    let editingJoinQuestionId = null;
+    let quizQuestionCounter = 0;
+
+    /* ================= إدارة عناصر الشراء والبيع للمدير ================= */
+    function getAdminMarketItems() {
+        const defaults = [
+            { id: 1, seller: 'المشرف العام', name: '🛡️ درع حماية الشبكة', desc: 'أداة لحماية حسابك من الثغرات الوهمية.', price: 50 },
+            { id: 2, seller: 'المشرف العام', name: '💻 سكربت فحص الثغرات الآلي', desc: 'أداة بايثون متقدمة لفحص الأكواد.', price: 100 }
+        ];
+        try {
+            const parsed = JSON.parse(localStorage.getItem(MARKET_ITEMS_KEY));
+            if (Array.isArray(parsed)) return parsed;
+        } catch (e) {}
+        localStorage.setItem(MARKET_ITEMS_KEY, JSON.stringify(defaults));
+        return defaults;
+    }
+
+    function saveAdminMarketItems(items) {
+        localStorage.setItem(MARKET_ITEMS_KEY, JSON.stringify(items));
+    }
+
+    function setAdminMarketFeedback(msg, isError = false) {
+        const el = document.getElementById('adminMarketFeedback');
+        if (!el) return;
+        el.style.color = isError ? '#f87171' : 'var(--accent-green)';
+        el.innerText = msg;
+    }
+
+    function renderAdminMarketTable() {
+        const container = document.getElementById('adminMarketTableContainer');
+        if (!container) return;
+
+        const items = getAdminMarketItems();
+        if (!items.length) {
+            container.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 14px;">لا توجد عناصر معروضة في الشراء والبيع حالياً.</div>';
+            return;
+        }
+
+        const rows = items.map(item => `
+            <tr>
+                <td><strong>${escapeHtmlAttr(item.name)}</strong></td>
+                <td style="color: var(--accent-blue);">${escapeHtmlAttr(item.seller || 'المشرف العام')}</td>
+                <td>${escapeHtmlAttr(item.desc || '')}</td>
+                <td style="color: var(--accent-green); font-weight: bold;">${parseInt(item.price, 10) || 0} E-Coin</td>
+                <td>
+                    <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                        <button type="button" class="btn-edit" onclick="openEditMarketItemModal(${item.id})">تعديل ✏️</button>
+                        <button type="button" class="btn-delete" onclick="deleteAdminMarketItem(${item.id})">حذف 🗑️</button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+
+        container.innerHTML = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>العنصر</th>
+                        <th>البائع</th>
+                        <th>الوصف</th>
+                        <th>السعر</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+            </table>
+        `;
+    }
+
+    function addAdminMarketItem() {
+        const nameEl = document.getElementById('adminMarketNameInput');
+        const sellerEl = document.getElementById('adminMarketSellerInput');
+        const priceEl = document.getElementById('adminMarketPriceInput');
+        const descEl = document.getElementById('adminMarketDescInput');
+
+        const name = (nameEl?.value || '').trim();
+        const seller = (sellerEl?.value || '').trim() || 'المشرف العام';
+        const price = parseInt(priceEl?.value, 10);
+        const desc = (descEl?.value || '').trim() || 'عنصر متاح للشراء في سوق المنصة.';
+
+        if (!name || isNaN(price) || price <= 0) {
+            setAdminMarketFeedback('⚠️ يرجى إدخال اسم العنصر وسعر صحيح أكبر من 0.', true);
+            return;
+        }
+
+        const items = getAdminMarketItems();
+        items.push({
+            id: Date.now(),
+            seller,
+            name,
+            desc,
+            price
+        });
+        saveAdminMarketItems(items);
+
+        nameEl.value = '';
+        priceEl.value = '';
+        descEl.value = '';
+        setAdminMarketFeedback('✅ تمت إضافة العنصر إلى قسم الشراء والبيع بنجاح.');
+        renderAdminMarketTable();
+    }
+
+    function openEditMarketItemModal(itemId) {
+        const items = getAdminMarketItems();
+        const target = items.find(i => Number(i.id) === Number(itemId));
+        if (!target) return;
+
+        document.getElementById('editMarketItemId').value = target.id;
+        document.getElementById('editMarketItemName').value = target.name || '';
+        document.getElementById('editMarketItemSeller').value = target.seller || 'المشرف العام';
+        document.getElementById('editMarketItemDesc').value = target.desc || '';
+        document.getElementById('editMarketItemPrice').value = target.price || 1;
+        document.getElementById('editMarketItemModal').style.display = 'flex';
+    }
+
+    function closeEditMarketItemModal() {
+        document.getElementById('editMarketItemModal').style.display = 'none';
+    }
+
+    function saveEditedMarketItem() {
+        const idVal = Number(document.getElementById('editMarketItemId').value);
+        const name = (document.getElementById('editMarketItemName').value || '').trim();
+        const seller = (document.getElementById('editMarketItemSeller').value || '').trim() || 'المشرف العام';
+        const desc = (document.getElementById('editMarketItemDesc').value || '').trim();
+        const price = parseInt(document.getElementById('editMarketItemPrice').value, 10);
+
+        if (!name || isNaN(price) || price <= 0) {
+            alert('يرجى إدخال اسم صحيح وسعر أكبر من 0.');
+            return;
+        }
+
+        const items = getAdminMarketItems();
+        const updated = items.map(item =>
+            Number(item.id) === idVal ? { ...item, name, seller, desc, price } : item
+        );
+        saveAdminMarketItems(updated);
+        closeEditMarketItemModal();
+        setAdminMarketFeedback('✅ تم تحديث بيانات العنصر في الشراء والبيع.');
+        renderAdminMarketTable();
+    }
+
+    function deleteAdminMarketItem(itemId) {
+        if (!confirm('هل أنت متأكد من حذف هذا العنصر من الشراء والبيع؟')) return;
+        const items = getAdminMarketItems().filter(i => Number(i.id) !== Number(itemId));
+        saveAdminMarketItems(items);
+        setAdminMarketFeedback('🗑️ تم حذف العنصر من الشراء والبيع.');
+        renderAdminMarketTable();
+    }
+
+    function resolveGroupIconUrl(rawIcon) {
+        const clean = String(rawIcon || '').trim();
+        if (!clean) return '/static/default_group.png';
+        if (clean.startsWith('http://') || clean.startsWith('https://') || clean.startsWith('/')) {
+            return clean;
+        }
+        return `/static/${clean.replace(/^static\//, '')}`;
+    }
+
+    function previewGroupFile(input, previewId) {
+        const img = document.getElementById(previewId);
+        if (!img || !input.files || !input.files[0]) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+            if (e.target && e.target.result) {
+                img.src = e.target.result;
+            }
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+
+    function cacheGroupsMediaMap() {
+        const mediaMap = {};
+        document.querySelectorAll('#sec-groups tbody tr').forEach(tr => {
+            const btn = tr.querySelector('button[data-group-id]');
+            const img = tr.querySelector('.group-row-img');
+            const nameEl = tr.querySelector('.group-row-name');
+            if (!btn) return;
+            const gid = String(btn.dataset.groupId || '').trim();
+            if (!gid) return;
+            const rawIcon = (img && img.dataset.rawIcon) ? img.dataset.rawIcon : (img ? img.getAttribute('src') : '');
+            mediaMap[gid] = {
+                id: gid,
+                name: nameEl ? nameEl.textContent.trim() : '',
+                icon: resolveGroupIconUrl(rawIcon)
+            };
+        });
+        localStorage.setItem(GROUP_MEDIA_MAP_KEY, JSON.stringify(mediaMap));
+    }
+
+    /* ================= إدارة أسئلة المقابلة والقبول في المجموعات ================= */
+    function getJoinQuestionsStore() {
+        try {
+            return JSON.parse(localStorage.getItem(JOIN_QUESTIONS_KEY)) || {};
+        } catch (e) {
+            return {};
+        }
+    }
+
+    function saveJoinQuestionsStore(store) {
+        localStorage.setItem(JOIN_QUESTIONS_KEY, JSON.stringify(store));
+    }
+
+    function normalizeGroupQuestionsList(rawList) {
+        if (!Array.isArray(rawList)) return [];
+        return rawList
+            .map((item, idx) => {
+                if (typeof item === 'string') {
+                    return { id: `q_${idx + 1}`, text: item.trim() };
+                }
+                if (item && typeof item === 'object') {
+                    return {
+                        id: item.id || `q_${idx + 1}`,
+                        text: String(item.text || item.question_text || '').trim()
+                    };
+                }
+                return null;
+            })
+            .filter(q => q && q.text.length > 0);
+    }
+
+    function setJoinQuestionsFeedback(msg, isError = false) {
+        const el = document.getElementById('joinQuestionsFeedback');
+        if (!el) return;
+        el.style.color = isError ? '#f87171' : 'var(--accent-green)';
+        el.innerText = msg;
+    }
+
+    function onJoinQuestionGroupChange() {
+        cancelJoinQuestionEdit();
+        const selectEl = document.getElementById('joinQuestionGroupSelect');
+        const groupId = String(selectEl ? selectEl.value : '').trim();
+        if (!groupId) {
+            renderJoinQuestionsList([]);
+            return;
+        }
+
+        const store = getJoinQuestionsStore();
+        const localNormalized = normalizeGroupQuestionsList(store[groupId]);
+        renderJoinQuestionsList(localNormalized);
+
+        fetch(`/api/admin/group_questions?group_id=${encodeURIComponent(groupId)}`)
+            .then(res => res.ok ? res.json() : null)
+            .then(data => {
+                const list = Array.isArray(data) ? data : (data && Array.isArray(data.questions) ? data.questions : null);
+                if (list) {
+                    const normalized = normalizeGroupQuestionsList(list);
+                    const latestStore = getJoinQuestionsStore();
+                    latestStore[groupId] = normalized;
+                    saveJoinQuestionsStore(latestStore);
+                    renderJoinQuestionsList(normalized);
+                }
+            })
+            .catch(() => {});
+    }
+
+    function renderJoinQuestionsList(questions) {
+        const container = document.getElementById('joinQuestionsListContainer');
+        const groupId = String(document.getElementById('joinQuestionGroupSelect')?.value || '').trim();
+        if (!container) return;
+
+        if (!groupId) {
+            container.innerHTML = '<p style="color: var(--text-muted); font-size: 13px;">اختر مجموعة أولاً لعرض أو تعديل أسئلة المقابلة الخاصة بها.</p>';
+            return;
+        }
+
+        const safeList = normalizeGroupQuestionsList(questions);
+        if (!safeList.length) {
+            container.innerHTML = '<p style="color: var(--text-muted); font-size: 13px;">لا توجد أسئلة مقابلة مضافة لهذه المجموعة حتى الآن.</p>';
+            return;
+        }
+
+        container.innerHTML = '';
+        safeList.forEach((q, index) => {
+            const card = document.createElement('div');
+            card.className = 'join-q-item-card';
+
+            const span = document.createElement('span');
+            span.style.cssText = 'font-size: 14px; color: var(--text-main); flex: 1;';
+            span.textContent = `${index + 1}. ${q.text}`;
+
+            const actions = document.createElement('div');
+            actions.style.cssText = 'display: flex; gap: 6px;';
+
+            const editBtn = document.createElement('button');
+            editBtn.type = 'button';
+            editBtn.className = 'btn-edit';
+            editBtn.textContent = 'تعديل ✏️';
+            editBtn.onclick = () => startEditJoinQuestion(q.id, q.text);
+
+            const delBtn = document.createElement('button');
+            delBtn.type = 'button';
+            delBtn.className = 'btn-delete';
+            delBtn.textContent = 'حذف 🗑️';
+            delBtn.onclick = () => deleteJoinQuestionItem(q.id);
+
+            actions.appendChild(editBtn);
+            actions.appendChild(delBtn);
+            card.appendChild(span);
+            card.appendChild(actions);
+            container.appendChild(card);
+        });
+    }
+
+    function saveJoinQuestionItem() {
+        const groupId = String(document.getElementById('joinQuestionGroupSelect')?.value || '').trim();
+        const input = document.getElementById('joinQuestionTextInput');
+        const text = (input?.value || '').trim();
+
+        if (!groupId) {
+            setJoinQuestionsFeedback('⚠️ يرجى اختيار المجموعة أولاً.', true);
+            return;
+        }
+        if (!text) {
+            setJoinQuestionsFeedback('⚠️ يرجى كتابة نص سؤال المقابلة.', true);
+            return;
+        }
+
+        const store = getJoinQuestionsStore();
+        const currentList = normalizeGroupQuestionsList(store[groupId]);
+
+        if (editingJoinQuestionId !== null) {
+            store[groupId] = currentList.map(q => String(q.id) === String(editingJoinQuestionId) ? { ...q, text } : q);
+            cancelJoinQuestionEdit();
+            setJoinQuestionsFeedback('✅ تم تعديل سؤال المقابلة، اضغط "حفظ أسئلة المقابلة للمستخدمين" لاعتماده.');
+        } else {
+            currentList.push({ id: `jq_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`, text });
+            store[groupId] = currentList;
+            if (input) input.value = '';
+            setJoinQuestionsFeedback('✅ تمت إضافة سؤال المقابلة، اضغط "حفظ أسئلة المقابلة للمستخدمين" لاعتماده.');
+        }
+
+        saveJoinQuestionsStore(store);
+        renderJoinQuestionsList(store[groupId]);
+    }
+
+    function startEditJoinQuestion(qId, qText) {
+        editingJoinQuestionId = qId;
+        const input = document.getElementById('joinQuestionTextInput');
+        if (input) {
+            input.value = qText;
+            input.focus();
+        }
+        document.getElementById('joinQuestionSaveBtn').innerText = '💾 حفظ التعديل';
+        document.getElementById('joinQuestionCancelBtn').style.display = 'inline-block';
+    }
+
+    function cancelJoinQuestionEdit() {
+        editingJoinQuestionId = null;
+        const input = document.getElementById('joinQuestionTextInput');
+        if (input) input.value = '';
+        const saveBtn = document.getElementById('joinQuestionSaveBtn');
+        if (saveBtn) saveBtn.innerText = '➕ إضافة سؤال';
+        const cancelBtn = document.getElementById('joinQuestionCancelBtn');
+        if (cancelBtn) cancelBtn.style.display = 'none';
+    }
+
+    function deleteJoinQuestionItem(qId) {
+        const groupId = String(document.getElementById('joinQuestionGroupSelect')?.value || '').trim();
+        if (!groupId) return;
+        const store = getJoinQuestionsStore();
+        const updated = normalizeGroupQuestionsList(store[groupId]).filter(q => String(q.id) !== String(qId));
+        store[groupId] = updated;
+        saveJoinQuestionsStore(store);
+        if (String(editingJoinQuestionId) === String(qId)) cancelJoinQuestionEdit();
+        renderJoinQuestionsList(updated);
+        setJoinQuestionsFeedback('🗑️ تم حذف سؤال المقابلة من القائمة الحالية.');
+    }
+
+    function syncJoinQuestionsToServer() {
+        const groupId = String(document.getElementById('joinQuestionGroupSelect')?.value || '').trim();
+        if (!groupId) {
+            setJoinQuestionsFeedback('⚠️ يرجى اختيار المجموعة أولاً.', true);
+            return;
+        }
+        const store = getJoinQuestionsStore();
+        const questions = normalizeGroupQuestionsList(store[groupId]);
+
+        fetch('/api/admin/group_questions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                group_id: groupId,
+                questions: questions
+            })
+        })
+            .then(res => res.ok ? res.json() : null)
+            .then(() => {
+                setJoinQuestionsFeedback('✅ تم حفظ وتحديث أسئلة المقابلة للمجموعة بنجاح!');
+            })
+            .catch(() => {
+                setJoinQuestionsFeedback('✅ تم حفظ أسئلة المقابلة محلياً وسيتم إرسالها عند توفر الاتصال.');
+            });
+    }
+
+    function activateAdminTab(clickedEl) {
+        document.querySelectorAll('.admin-tab-link').forEach(link => link.classList.remove('active'));
+        if (clickedEl) {
+            clickedEl.classList.add('active');
+            clickedEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+    }
+
+    function initAdminScrollSpy() {
+        const tabs = document.querySelectorAll('.admin-tab-link');
+        const sections = Array.from(tabs)
+            .map(tab => document.querySelector(tab.getAttribute('href')))
+            .filter(Boolean);
+
+        if (!tabs.length || !sections.length) return;
+
+        window.addEventListener('scroll', () => {
+            const scrollPos = window.scrollY + 130;
+            let activeId = sections[0].id;
+
+            for (const sec of sections) {
+                if (sec.offsetTop <= scrollPos) {
+                    activeId = sec.id;
+                }
+            }
+
+            tabs.forEach(tab => {
+                if (tab.getAttribute('href') === `#${activeId}`) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+        }, { passive: true });
+    }
+
+    /* ================= إدارة الكويز المفاجئ ================= */
+    function setQuizFeedback(msg, isError = false) {
+        const el = document.getElementById('quizManagerFeedback');
+        if (!el) return;
+        el.style.color = isError ? '#f87171' : 'var(--accent-green)';
+        el.innerText = msg;
+    }
+
+    function addQuizQuestionCard(qData = null) {
+        const container = document.getElementById('quizQuestionsBuilderContainer');
+        if (!container) return;
+
+        quizQuestionCounter++;
+        const qId = qData && qData.id ? qData.id : quizQuestionCounter;
+        const card = document.createElement('div');
+        card.className = 'quiz-question-builder-card';
+        card.dataset.qid = qId;
+
+        const opts = Array.isArray(qData && qData.options) && qData.options.length >= 2
+            ? qData.options
+            : ['', '', '', ''];
+        const correctIdx = qData && typeof qData.correct_index === 'number' ? qData.correct_index : 0;
+
+        card.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px;">
+                <strong style="color: var(--accent-blue); font-size: 13px;">سؤال #1</strong>
+                <button type="button" class="btn-delete" style="padding: 4px 10px;" onclick="removeQuizQuestionCard(this)">حذف السؤال 🗑️</button>
+            </div>
+            <div class="form-group" style="margin-bottom: 10px;">
+                <input type="text" class="quiz-q-text" placeholder="اكتب نص السؤال هنا..." value="${escapeHtmlAttr(qData && qData.question_text ? qData.question_text : '')}">
+            </div>
+            <div class="quiz-options-grid">
+                <input type="text" class="quiz-q-opt" placeholder="الخيار 1" value="${escapeHtmlAttr(opts[0] || '')}">
+                <input type="text" class="quiz-q-opt" placeholder="الخيار 2" value="${escapeHtmlAttr(opts[1] || '')}">
+                <input type="text" class="quiz-q-opt" placeholder="الخيار 3 (اختياري)" value="${escapeHtmlAttr(opts[2] || '')}">
+                <input type="text" class="quiz-q-opt" placeholder="الخيار 4 (اختياري)" value="${escapeHtmlAttr(opts[3] || '')}">
+            </div>
+            <div style="margin-top: 10px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <label style="font-size: 12px; color: var(--text-muted);">الإجابة الصحيحة:</label>
+                <select class="quiz-q-correct" style="width: auto; min-width: 150px; padding: 6px 10px;">
+                    <option value="0" ${correctIdx === 0 ? 'selected' : ''}>الخيار 1</option>
+                    <option value="1" ${correctIdx === 1 ? 'selected' : ''}>الخيار 2</option>
+                    <option value="2" ${correctIdx === 2 ? 'selected' : ''}>الخيار 3</option>
+                    <option value="3" ${correctIdx === 3 ? 'selected' : ''}>الخيار 4</option>
+                </select>
+            </div>
+        `;
+
+        container.appendChild(card);
+        refreshQuizQuestionIndices();
+    }
+
+    function removeQuizQuestionCard(btn) {
+        const card = btn.closest('.quiz-question-builder-card');
+        if (card) card.remove();
+        refreshQuizQuestionIndices();
+    }
+
+    function refreshQuizQuestionIndices() {
+        const cards = document.querySelectorAll('#quizQuestionsBuilderContainer .quiz-question-builder-card');
+        cards.forEach((card, idx) => {
+            const label = card.querySelector('strong');
+            if (label) label.textContent = `سؤال #${idx + 1}`;
+        });
+    }
+
+    function formatIsoToDatetimeLocal(isoOrStr) {
+        if (!isoOrStr) return '';
+        const d = new Date(isoOrStr);
+        if (Number.isNaN(d.getTime())) return '';
+        const pad = n => String(n).padStart(2, '0');
+        return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    }
+
+    function populateQuizForm(quizObj) {
+        const activeCb = document.getElementById('quizActiveCheckbox');
+        const titleInp = document.getElementById('quizTitleInput');
+        const durInp = document.getElementById('quizDurationInput');
+        const rewInp = document.getElementById('quizRewardInput');
+        const schedInp = document.getElementById('quizScheduledTimeInput');
+        const container = document.getElementById('quizQuestionsBuilderContainer');
+
+        if (!activeCb || !titleInp || !durInp || !rewInp || !container) return;
+
+        const q = quizObj || {};
+        activeCb.checked = Boolean(q.active);
+        titleInp.value = q.title || '';
+        durInp.value = parseInt(q.duration_seconds, 10) || 120;
+        rewInp.value = parseInt(q.reward_coins, 10) || 25;
+        if (schedInp) {
+            schedInp.value = formatIsoToDatetimeLocal(q.scheduled_time || q.starts_at || '');
+        }
+
+        container.innerHTML = '';
+        const questions = Array.isArray(q.questions) && q.questions.length > 0 ? q.questions : [null];
+        questions.forEach(item => addQuizQuestionCard(item));
+    }
+
+    function initSurpriseQuizManager() {
+        const container = document.getElementById('quizQuestionsBuilderContainer');
+        if (!container) return;
+
+        let cached = null;
+        try {
+            cached = JSON.parse(localStorage.getItem(QUIZ_CFG_KEY)) || JSON.parse(localStorage.getItem('eaea_surprise_quiz_config'));
+        } catch (e) {
+            cached = null;
+        }
+        populateQuizForm(cached);
+
+        fetch('/api/admin/surprise_quiz')
+            .then(res => res.ok ? res.json() : null)
+            .then(data => {
+                const quizData = data && data.quiz ? data.quiz : data;
+                if (quizData && (quizData.title || Array.isArray(quizData.questions))) {
+                    localStorage.setItem(QUIZ_CFG_KEY, JSON.stringify(quizData));
+                    populateQuizForm(quizData);
+                }
+            })
+            .catch(() => {});
+    }
+
+    function collectQuizPayload(forceActive = null) {
+        const activeCb = document.getElementById('quizActiveCheckbox');
+        const title = (document.getElementById('quizTitleInput').value || '').trim();
+        const durationSeconds = parseInt(document.getElementById('quizDurationInput').value, 10) || 120;
+        const rewardCoins = parseInt(document.getElementById('quizRewardInput').value, 10) || 0;
+        const schedRaw = (document.getElementById('quizScheduledTimeInput')?.value || '').trim();
+        const scheduledIso = schedRaw ? new Date(schedRaw).toISOString() : null;
+        const isActive = forceActive !== null ? forceActive : Boolean(activeCb && activeCb.checked);
+
+        const cards = Array.from(document.querySelectorAll('#quizQuestionsBuilderContainer .quiz-question-builder-card'));
+        const questions = [];
+
+        for (let i = 0; i < cards.length; i++) {
+            const card = cards[i];
+            const qText = (card.querySelector('.quiz-q-text').value || '').trim();
+            const rawOpts = Array.from(card.querySelectorAll('.quiz-q-opt')).map(el => el.value.trim());
+            const validOpts = rawOpts.filter(Boolean);
+            const correctIndex = parseInt(card.querySelector('.quiz-q-correct').value, 10) || 0;
+
+            if (!qText || validOpts.length < 2) {
+                return { error: `⚠️ يرجى إكمال نص السؤال #${i + 1} وإدخال خيارين على الأقل.` };
+            }
+
+            questions.push({
+                id: card.dataset.qid || (i + 1),
+                question_text: qText,
+                options: validOpts,
+                correct_index: Math.min(correctIndex, validOpts.length - 1)
+            });
+        }
+
+        if (isActive && (!title || questions.length === 0)) {
+            return { error: '⚠️ لتفعيل الكويز المفاجئ يجب إدخال عنوان الكويز وسؤال واحد على الأقل.' };
+        }
+
+        return {
+            payload: {
+                id: Date.now(),
+                active: isActive,
+                title: title || 'كويز مفاجئ',
+                duration_seconds: Math.max(15, durationSeconds),
+                reward_coins: Math.max(0, rewardCoins),
+                scheduled_time: scheduledIso,
+                questions
+            }
+        };
+    }
+
+    function saveSurpriseQuizConfig() {
+        const result = collectQuizPayload(null);
+        if (result.error) {
+            setQuizFeedback(result.error, true);
+            return;
+        }
+
+        const quizPayload = result.payload;
+        localStorage.setItem(QUIZ_CFG_KEY, JSON.stringify(quizPayload));
+
+        fetch('/api/admin/surprise_quiz', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(quizPayload)
+        })
+            .then(res => res.ok ? res.json() : null)
+            .then(data => {
+                const saved = data && data.quiz ? data.quiz : quizPayload;
+                localStorage.setItem(QUIZ_CFG_KEY, JSON.stringify(saved));
+                setQuizFeedback(
+                    saved.active
+                        ? '✅ تم حفظ وتفعيل الكويز المفاجئ بنجاح للمستخدمين!'
+                        : '✅ تم حفظ إعدادات الكويز (في وضع غير نشط حالياً).'
+                );
+            })
+            .catch(() => {
+                setQuizFeedback('✅ تم حفظ إعدادات الكويز محلياً (سيتم إرسالها للخادم عند توفر الاتصال).', false);
+            });
+    }
+
+    function disableSurpriseQuiz() {
+        const activeCb = document.getElementById('quizActiveCheckbox');
+        if (activeCb) activeCb.checked = false;
+        const result = collectQuizPayload(false);
+        const quizPayload = result.payload || { active: false, questions: [] };
+        quizPayload.active = false;
+        localStorage.setItem(QUIZ_CFG_KEY, JSON.stringify(quizPayload));
+
+        fetch('/api/admin/surprise_quiz', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(quizPayload)
+        })
+            .then(() => setQuizFeedback('⏸️ تم إيقاف الكويز المفاجئ عن الظهور للمستخدمين.'))
+            .catch(() => setQuizFeedback('⏸️ تم إيقاف الكويز المفاجئ محلياً.'));
+    }
+
+    /* ================= إدارة الترحيب والإشعارات ================= */
+    const defaultWelcomeCfg = {
+        title: "أهلاً بك مجدداً في عالم E.A.E.A! 🚀",
+        subtitle: "استمر في كتابة الأكواد وتطوير مهاراتك التقنية، كل خطوة تقربك أكثر لهدفك التقني!",
+        welcomeNotifications: [
+            { id: 1, text: "أهلاً بك في منصة عالم E.A.E.A، نتمنى لك رحلة تعلم وتطوير مثمرة." }
+        ]
+    };
+
+    function getWelcomeCfg() {
+        let stored = null;
+        try {
+            stored = JSON.parse(localStorage.getItem(WELCOME_CFG_KEY));
+        } catch (e) {
+            stored = null;
+        }
+        if (!stored) {
+            localStorage.setItem(WELCOME_CFG_KEY, JSON.stringify(defaultWelcomeCfg));
+            return {
+                title: defaultWelcomeCfg.title,
+                subtitle: defaultWelcomeCfg.subtitle,
+                welcomeNotifications: [...defaultWelcomeCfg.welcomeNotifications]
+            };
+        }
+        return {
+            title: stored.title || defaultWelcomeCfg.title,
+            subtitle: stored.subtitle || defaultWelcomeCfg.subtitle,
+            welcomeNotifications: Array.isArray(stored.welcomeNotifications)
+                ? stored.welcomeNotifications
+                : [...defaultWelcomeCfg.welcomeNotifications]
+        };
+    }
+
+    function saveWelcomeCfg(cfg) {
+        localStorage.setItem(WELCOME_CFG_KEY, JSON.stringify(cfg));
+    }
+
+    function syncWelcomeCfgToServer(cfg, successMsg) {
+        fetch('/api/admin/welcome_settings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                title: cfg.title,
+                subtitle: cfg.subtitle,
+                welcomeNotifications: cfg.welcomeNotifications
+            })
+        })
+        .then(res => res.ok ? res.json() : null)
+        .then(data => {
+            if (data && data.data) {
+                saveWelcomeCfg(data.data);
+                renderWelcomeNotifItems();
+            }
+            setWelcomeFeedback(successMsg);
+        })
+        .catch(() => {
+            setWelcomeFeedback(`${successMsg} (محفوظ محلياً وسيتم المزامنة عند توفر الاتصال)`);
+        });
+    }
+
+    function setWelcomeFeedback(msg) {
+        const el = document.getElementById('welcomeManagerFeedback');
+        if (el) el.innerText = msg;
+    }
+
+    function initWelcomeManager() {
+        const titleInput = document.getElementById('adminWelcomeTitleInput');
+        const subInput = document.getElementById('adminWelcomeSubtitleInput');
+        if (!titleInput || !subInput) return;
+
+        const cfg = getWelcomeCfg();
+        titleInput.value = cfg.title;
+        subInput.value = cfg.subtitle;
+        renderWelcomeNotifItems();
+
+        fetch('/api/welcome_settings')
+            .then(res => res.ok ? res.json() : null)
+            .then(serverCfg => {
+                if (serverCfg) {
+                    saveWelcomeCfg(serverCfg);
+                    titleInput.value = serverCfg.title || cfg.title;
+                    subInput.value = serverCfg.subtitle || cfg.subtitle;
+                    renderWelcomeNotifItems();
+                }
+            })
+            .catch(() => {});
+    }
+
+    function saveWelcomeMessage() {
+        const title = document.getElementById('adminWelcomeTitleInput').value.trim();
+        const subtitle = document.getElementById('adminWelcomeSubtitleInput').value.trim();
+        if (!title || !subtitle) {
+            setWelcomeFeedback('⚠️ يرجى كتابة عنوان الترحيب والنص الفرعي.');
+            return;
+        }
+
+        const cfg = getWelcomeCfg();
+        cfg.title = title;
+        cfg.subtitle = subtitle;
+        saveWelcomeCfg(cfg);
+        syncWelcomeCfgToServer(cfg, '✅ تم حفظ تعديل الترحيب بنجاح.');
+    }
+
+    function saveWelcomeNotif() {
+        const input = document.getElementById('welcomeNotifTextInput');
+        const text = input.value.trim();
+        if (!text) {
+            setWelcomeFeedback('⚠️ اكتب نص الإشعار الترحيبي أولاً.');
+            return;
+        }
+
+        const cfg = getWelcomeCfg();
+        let feedbackMsg = '✅ تمت إضافة الإشعار الترحيبي بنجاح.';
+        if (editingWelcomeNotifId !== null) {
+            cfg.welcomeNotifications = cfg.welcomeNotifications.map(item =>
+                item.id === editingWelcomeNotifId ? { ...item, text } : item
+            );
+            feedbackMsg = '✅ تم تعديل الإشعار الترحيبي بنجاح.';
+            cancelWelcomeNotifEdit();
+        } else {
+            cfg.welcomeNotifications.push({ id: Date.now(), text });
+            input.value = '';
+        }
+
+        saveWelcomeCfg(cfg);
+        renderWelcomeNotifItems();
+        syncWelcomeCfgToServer(cfg, feedbackMsg);
+    }
+
+    function editWelcomeNotif(id) {
+        const cfg = getWelcomeCfg();
+        const item = cfg.welcomeNotifications.find(n => n.id === id);
+        if (!item) return;
+
+        editingWelcomeNotifId = id;
+        document.getElementById('welcomeNotifTextInput').value = item.text;
+        document.getElementById('welcomeNotifSaveBtn').innerText = '💾 حفظ التعديل';
+        document.getElementById('welcomeNotifCancelBtn').style.display = 'inline-block';
+    }
+
+    function cancelWelcomeNotifEdit() {
+        editingWelcomeNotifId = null;
+        document.getElementById('welcomeNotifTextInput').value = '';
+        document.getElementById('welcomeNotifSaveBtn').innerText = '➕ إضافة إشعار ترحيبي';
+        document.getElementById('welcomeNotifCancelBtn').style.display = 'none';
+    }
+
+    function deleteWelcomeNotif(id) {
+        const cfg = getWelcomeCfg();
+        cfg.welcomeNotifications = cfg.welcomeNotifications.filter(n => n.id !== id);
+        saveWelcomeCfg(cfg);
+        if (editingWelcomeNotifId === id) cancelWelcomeNotifEdit();
+        renderWelcomeNotifItems();
+        syncWelcomeCfgToServer(cfg, '🗑️ تم حذف الإشعار الترحيبي.');
+    }
+
+    function renderWelcomeNotifItems() {
+        const container = document.getElementById('welcomeNotificationsContainer');
+        if (!container) return;
+
+        const cfg = getWelcomeCfg();
+        container.innerHTML = '';
+
+        if (!cfg.welcomeNotifications.length) {
+            container.innerHTML = '<p style="color: var(--text-muted); font-size: 13px; margin-top: 8px;">لا توجد إشعارات ترحيبية مضافة حالياً.</p>';
+            return;
+        }
+
+        cfg.welcomeNotifications.forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'welcome-notif-card';
+            const span = document.createElement('span');
+            span.style.cssText = 'font-size: 14px; color: var(--text-main); flex: 1;';
+            span.textContent = item.text;
+
+            const actions = document.createElement('div');
+            actions.style.cssText = 'display: flex; gap: 6px;';
+
+            const editBtn = document.createElement('button');
+            editBtn.type = 'button';
+            editBtn.className = 'btn-edit';
+            editBtn.textContent = 'تعديل ✏️';
+            editBtn.onclick = () => editWelcomeNotif(item.id);
+
+            const delBtn = document.createElement('button');
+            delBtn.type = 'button';
+            delBtn.className = 'btn-delete';
+            delBtn.textContent = 'حذف 🗑️';
+            delBtn.onclick = () => deleteWelcomeNotif(item.id);
+
+            actions.appendChild(editBtn);
+            actions.appendChild(delBtn);
+            row.appendChild(span);
+            row.appendChild(actions);
+            container.appendChild(row);
+        });
+    }
+
+    function formatSessionDuration(loginTimeStr, logoutTimeStr, explicitDuration) {
+        if (explicitDuration) return explicitDuration;
+        if (!loginTimeStr) return 'غير محسوب';
+
+        const startTs = Date.parse(loginTimeStr);
+        if (isNaN(startTs)) return 'غير محسوب';
+
+        const endTs = logoutTimeStr ? Date.parse(logoutTimeStr) : Date.now();
+        if (isNaN(endTs) || endTs < startTs) return 'غير محسوب';
+
+        const totalMinutes = Math.floor((endTs - startTs) / 60000);
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+
+        if (hours > 0) {
+            return `${hours} ساعة و ${minutes} دقيقة`;
+        }
+        return `${minutes} دقيقة`;
+    }
+
+    function renderUsersActivityRows(users) {
+        const container = document.getElementById('usersActivityLiveContainer');
+        if (!container) return;
+
+        if (!Array.isArray(users) || users.length === 0) {
+            container.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 15px;">لا توجد سجلات مستخدمين متاحة حالياً.</div>';
+            return;
+        }
+
+        const rowsHtml = users.map(u => {
+            const fullname = u.fullname || u[1] || '';
+            const nickname = u.nickname || u[2] || '';
+            const ipAddr = u.ip_address || u.ip || u[5] || 'غير محدد';
+            const loginTime = u.last_login || u.login_time || u[6] || 'لم يسجل دخول بعد';
+            const logoutTime = u.last_logout || u.logout_time || u[7] || 'متصل الآن / لم يخرج بعد';
+            const sessionDuration = formatSessionDuration(
+                u.last_login || u.login_time || u[6],
+                u.last_logout || u.logout_time || u[7],
+                u.session_duration || u[8]
+            );
+            const focusHours = (u.farm_hours !== undefined && u.farm_hours !== null)
+                ? u.farm_hours
+                : (u[4] !== undefined && u[4] !== null ? u[4] : 0);
+
+            return `
+                <tr>
+                    <td><strong>${fullname}</strong></td>
+                    <td style="color: var(--accent-blue);">${nickname}</td>
+                    <td><code style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); padding: 2px 6px; border-radius: 4px;">${ipAddr}</code></td>
+                    <td>${loginTime}</td>
+                    <td>${logoutTime}</td>
+                    <td><span style="color: var(--accent-blue); font-weight: bold;">⏱️ ${sessionDuration}</span></td>
+                    <td><span style="color: var(--accent-green); font-weight: bold;">⏳ ${focusHours} ساعة</span></td>
+                </tr>
+            `;
+        }).join('');
+
+        container.innerHTML = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>الاسم الحقيقي</th>
+                        <th>اللقب</th>
+                        <th>عنوان IP الجهاز</th>
+                        <th>وقت آخر دخول</th>
+                        <th>وقت آخر خروج</th>
+                        <th>مدة الجلوس في الموقع</th>
+                        <th>وقت البقاء / التركيز (ساعات)</th>
+                    </tr>
+                </thead>
+                <tbody>${rowsHtml}</tbody>
+            </table>
+        `;
+    }
+
+    function refreshUsersActivityTable() {
+        fetch('/api/admin/users_activity')
+            .then(res => res.ok ? res.json() : fetch('/api/users_activity').then(r => r.ok ? r.json() : null))
+            .then(data => {
+                const list = Array.isArray(data) ? data : (data && Array.isArray(data.users) ? data.users : null);
+                if (list) renderUsersActivityRows(list);
+            })
+            .catch(() => {});
+    }
+
+    function openEditModal(id, name, desc, iconSrc = '/static/default_group.png') {
+        document.getElementById('editGroupId').value = id;
+        document.getElementById('editGroupName').value = name;
+        document.getElementById('editGroupDesc').value = desc;
+        const preview = document.getElementById('editGroupIconPreview');
+        if (preview) preview.src = resolveGroupIconUrl(iconSrc);
+        const fileInp = document.getElementById('editGroupIconInput');
+        if (fileInp) fileInp.value = '';
+        document.getElementById('editGroupModal').style.display = 'flex';
+    }
+
+    function openEditModalFromBtn(btn) {
+        const row = btn.closest('tr');
+        const groupId = btn.dataset.groupId || '';
+        const nameEl = row ? row.querySelector('.group-row-name') : null;
+        const descEl = row ? row.querySelector('.group-row-desc') : null;
+        const imgEl = row ? row.querySelector('.group-row-img') : null;
+        const name = nameEl ? nameEl.textContent.trim() : '';
+        const desc = descEl ? descEl.textContent.trim() : '';
+        const iconSrc = (imgEl && imgEl.dataset.rawIcon) ? imgEl.dataset.rawIcon : (imgEl ? imgEl.getAttribute('src') : '/static/default_group.png');
+        openEditModal(groupId, name, desc, iconSrc);
+    }
+
+    function closeEditModal() {
+        document.getElementById('editGroupModal').style.display = 'none';
+    }
+
+    function openEditRefModalFromBtn(btn) {
+        document.getElementById('editRefId').value = btn.dataset.id || '';
+        document.getElementById('editRefGroupId').value = btn.dataset.groupId || '';
+        document.getElementById('editRefTitle').value = btn.dataset.title || '';
+        document.getElementById('editRefDesc').value = btn.dataset.desc || '';
+        document.getElementById('editRefLink').value = btn.dataset.link || '';
+        document.getElementById('editRefModal').style.display = 'flex';
+    }
+
+    function closeEditRefModal() {
+        document.getElementById('editRefModal').style.display = 'none';
+    }
+
+    function escapeHtmlAttr(str) {
+        return String(str || '')
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+    }
+
+    function refreshAdminReferencesTable() {
+        const container = document.getElementById('adminReferencesLiveContainer');
+        if (!container) return;
+
+        fetch('/api/references')
+            .then(res => res.ok ? res.json() : null)
+            .then(refs => {
+                if (!Array.isArray(refs)) return;
+                if (!refs.length) {
+                    container.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 15px;">لا توجد مراجع مضافة حتى الآن.</div>';
+                    return;
+                }
+                const rowsHtml = refs.map(ref => `
+                    <tr>
+                        <td><span style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); padding: 3px 8px; border-radius: 4px; font-size: 12px;">${escapeHtmlAttr(ref.group_name || 'عام / جميع المجموعات')}</span></td>
+                        <td><strong>${escapeHtmlAttr(ref.title || '')}</strong></td>
+                        <td>${escapeHtmlAttr(ref.description || '')}</td>
+                        <td><a href="${escapeHtmlAttr(ref.link || '#')}" target="_blank" style="color: var(--accent-blue);">رابط المرجع 🔗</a></td>
+                        <td>
+                            <div style="display: flex; gap: 6px;">
+                                <button type="button" class="btn-edit"
+                                    data-id="${escapeHtmlAttr(ref.id)}"
+                                    data-group-id="${ref.group_id !== null && ref.group_id !== undefined ? escapeHtmlAttr(ref.group_id) : ''}"
+                                    data-title="${escapeHtmlAttr(ref.title || '')}"
+                                    data-desc="${escapeHtmlAttr(ref.description || '')}"
+                                    data-link="${escapeHtmlAttr(ref.link || '')}"
+                                    onclick="openEditRefModalFromBtn(this)">تعديل ✏️</button>
+                                <a href="/dashboard/admin/delete_reference/${escapeHtmlAttr(ref.id)}" class="btn-delete" onclick="return confirm('هل أنت متأكد من حذف هذا المرجع؟');">حذف 🗑️</a>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+
+                container.innerHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>المجموعة</th>
+                                <th>العنوان</th>
+                                <th>الوصف</th>
+                                <th>الرابط</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rowsHtml}</tbody>
+                    </table>
+                `;
+            })
+            .catch(() => {});
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedTheme = localStorage.getItem('theme_mode') || 'dark';
+        const htmlRoot = document.getElementById('htmlRoot');
+        const checkbox = document.getElementById('themeSwitch');
+        
+        if (htmlRoot) htmlRoot.className = savedTheme;
+        if (checkbox) checkbox.checked = (savedTheme === 'light');
+
+        cacheGroupsMediaMap();
+        initAdminScrollSpy();
+        initWelcomeManager();
+        onJoinQuestionGroupChange();
+        initSurpriseQuizManager();
+        renderAdminMarketTable();
+        refreshUsersActivityTable();
+        refreshAdminReferencesTable();
+    });
+
+    function toggleTheme() {
+        const htmlRoot = document.getElementById('htmlRoot');
+        const checkbox = document.getElementById('themeSwitch');
+        
+        if (checkbox && checkbox.checked) {
+            htmlRoot.classList.remove('dark');
+            htmlRoot.classList.add('light');
+            localStorage.setItem('theme_mode', 'light');
+        } else {
+            htmlRoot.classList.remove('light');
+            htmlRoot.classList.add('dark');
+            localStorage.setItem('theme_mode', 'dark');
+        }
+    }
+
+    function sendReply(requestId) {
+        const inputField = document.getElementById('reply-' + requestId);
+        const replyText = inputField.value.trim();
+        if (!replyText) {
+            alert('الرجاء كتابة نص الرد أولاً.');
+            return;
+        }
+
+        fetch('/send_request_reply', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ request_id: requestId, reply: replyText })
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message || 'تم إرسال الرد والإشعار للمستخدم بنجاح!');
+            inputField.value = '';
+        })
+        .catch(() => {
+            alert('حدث خطأ أثناء الإرسال.');
+        });
+    }
+</script>
+
+</body>
+</html>

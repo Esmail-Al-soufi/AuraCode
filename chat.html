@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دردشة المجموعة - AuraCode</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.65);
+            --accent-blue: #38bdf8;
+            --accent-green: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: rgba(51, 65, 85, 0.7);
+        }
+
+        html.light {
+            --bg-dark: #f1f5f9;
+            --card-bg: rgba(255, 255, 255, 0.75);
+            --accent-blue: #0284c7;
+            --accent-green: #059669;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: rgba(203, 213, 225, 0.7);
+        }
+
+        * {
+            transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease !important;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            direction: rtl;
+            overflow: hidden;
+        }
+
+        /* خلفية الأرقام والأكواد السيبرانية المتحركة */
+        #matrixCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.35;
+        }
+
+        header {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .header-status-badges {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .badge-box {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border-color);
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chat-container {
+            flex: 1;
+            max-width: 900px;
+            width: 100%;
+            margin: 15px auto;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            position: relative;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .message-bubble.my-message {
+            align-self: flex-start;
+            border-color: var(--accent-blue);
+        }
+
+        .message-bubble.other-message {
+            align-self: flex-end;
+            border-color: var(--accent-green);
+        }
+
+        .msg-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .msg-header img {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--accent-blue);
+        }
+
+        .msg-sender {
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--accent-blue);
+        }
+
+        .chat-input-area {
+            padding: 15px;
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chat-input-area input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .chat-input-area input[type="text"]:focus {
+            border-color: var(--accent-blue);
+            background: rgba(30, 41, 59, 0.7);
+        }
+
+        .btn-send {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-send:hover { opacity: 0.9; }
+
+        .media-upload-label {
+            cursor: pointer;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid var(--border-color);
+            padding: 10px 14px;
+            border-radius: 8px;
+            color: var(--accent-blue);
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .media-upload-label:hover { border-color: var(--accent-blue); background: rgba(30, 41, 59, 0.8); }
+
+        .switch-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding: 12px 15px;
+            background: var(--bg-dark);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #475569;
+            transition: 0.4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider { background-color: var(--accent-blue); }
+        input:checked + .slider:before { transform: translateX(24px); }
+    </style>
+</head>
+<body>
+
+    <!-- خلفية الأرقام والأكواد السيبرانية المتحركة -->
+    <canvas id="matrixCanvas"></canvas>
+
+    <header>
+      <div style="display: flex; align-items: center; gap: 10px;">
+          <a href="/dashboard" style="color: var(--accent-blue); text-decoration: none; font-weight: bold; font-size: 14px;">← لوحة التحكم</a>
+          <span style="color: var(--border-color);">|</span>
+          <h3 style="margin: 0; color: var(--accent-green); font-size: 15px;">💬 {{ group_name }}</h3>
+      </div>
+
+      <!-- مؤشرات الرصيد والعداد العلوي في صفحة المحادثة -->
+      <div class="header-status-badges">
+          <div class="badge-box" title="رصيد النقاط الحالي">
+              <span>🪙</span>
+              <span id="headerCoinBalance" style="color: var(--accent-green); font-weight: bold;">0</span>
+          </div>
+          <!-- عداد المزرعة النشط في حال كان يعمل -->
+          <div class="badge-box" id="headerFarmBadge" style="display: none; border-color: var(--accent-green);" title="جلسة التركيز النشطة">
+              <span id="headerFarmIcon">🌱</span>
+              <span id="headerFarmCountdown" style="color: var(--accent-green); font-weight: bold; font-family: monospace;">00:00</span>
+          </div>
+      </div>
+
+      <div>
+        <button onclick="toggleSidebar()" style="background: var(--border-color); color: var(--text-main); border: none; width: 38px; height: 38px; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center;" title="الإعدادات">☰</button>
+      </div>
+    </header>
+
+    <!-- قائمة الإعدادات الجانبية -->
+    <div id="settingsSidebar" style="position: fixed; top: 0; left: -320px; width: 300px; height: 100%; background: var(--card-bg); backdrop-filter: blur(15px); box-shadow: -5px 0 25px rgba(0,0,0,0.3); padding: 20px; z-index: 1000; overflow-y: auto; border-left: 1px solid var(--border-color); transition: left 0.3s ease;">
+        <h3 style="color: var(--accent-blue);">إعدادات الحساب</h3>
+        
+        <div class="switch-container">
+            <span style="font-size: 14px; font-weight: bold;">🌙 وضع المظهر (فاتح/غامق)</span>
+            <label class="switch">
+                <input type="checkbox" id="themeSwitch" onchange="toggleTheme()">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <form action="/update_profile" method="POST" enctype="multipart/form-data">
+            <label style="color: var(--text-muted); font-size: 13px;">اللقب:</label>
+            <input type="text" name="nickname" style="width: 100%; margin-bottom: 15px; padding: 8px; background: rgba(15,23,42,0.6); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 5px;" value="{{ user_nickname }}">
+            <button type="submit" style="width: 100%; background: var(--accent-blue); color: #fff; border: none; padding: 10px; cursor: pointer; font-weight: bold; border-radius: 5px;">تحديث اللقب</button>
+        </form>
+    </div>
+
+    <div class="chat-container">
+        <div class="chat-messages" id="chatMessages">
+            {% if messages %}
+                {% for sender, message, profile_pic, media_type in messages %}
+                    <div class="message-bubble {% if sender == user_nickname %}my-message{% else %}other-message{% endif %}">
+                        <div class="msg-header">
+                            <img src="{{ url_for('static', filename=profile_pic) }}" alt="Pic">
+                            <span class="msg-sender">{{ sender }}</span>
+                        </div>
+                        <div>
+                            {% if media_type == 'image' %}
+                                <img src="{{ url_for('static', filename=message) }}" style="max-width: 200px; border-radius: 8px; display: block;">
+                            {% elif media_type == 'video' %}
+                                <video controls style="max-width: 200px; border-radius: 8px; display: block;"><source src="{{ url_for('static', filename=message) }}"></video>
+                            {% elif media_type == 'audio' %}
+                                <audio controls style="width: 200px;"><source src="{{ url_for('static', filename=message) }}"></audio>
+                            {% else %}
+                                <span style="word-break: break-all;">{{ message }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p style="text-align: center; color: var(--text-muted); margin-top: auto; margin-bottom: auto;">لا توجد رسائل بعد. كن أول المشاركين في الدردشة في AuraCode! 🚀</p>
+            {% endif %}
+        </div>
+
+        <div class="chat-input-area">
+            <label for="mediaFileInput" class="media-upload-label" title="إرسال صورة أو ملف">📎</label>
+            <input type="file" id="mediaFileInput" style="display: none;" onchange="uploadMediaMessage(this)">
+            
+            <input type="text" id="messageInput" placeholder="اكتب رسالتك هنا..." onkeypress="handleKeyPress(event)">
+            <button class="btn-send" onclick="sendTextMessage()">إرسال 🚀</button>
+        </div>
+    </div>
+
+<script>
+  const groupId = "{{ group_id }}";
+  const currentUser = "{{ user_nickname }}";
+
+  window.addEventListener('DOMContentLoaded', () => {
+      // جلب وعرض الرصيد المخزن محلياً للمستخدم
+      let savedCoins = localStorage.getItem('user_coins_' + currentUser);
+      if (savedCoins !== null) {
+          document.getElementById('headerCoinBalance').innerText = savedCoins;
+      }
+
+      // التحقق من وجود عداد مزرعة نشط ومتابعة عرضه في الهيدر
+      checkActiveFarmTimerHeader();
+
+      const savedTheme = localStorage.getItem('theme_mode') || 'dark';
+      const htmlRoot = document.getElementById('htmlRoot');
+      const checkbox = document.getElementById('themeSwitch');
+      
+      if (htmlRoot) htmlRoot.className = savedTheme;
+      if (checkbox) checkbox.checked = (savedTheme === 'light');
+
+      const chatBox = document.getElementById('chatMessages');
+      chatBox.scrollTop = chatBox.scrollHeight;
+  });
+
+  // مزامنة وعرض عداد المزرعة في الأعلى إن وجد
+  function checkActiveFarmTimerHeader() {
+      const endTime = parseInt(localStorage.getItem('farm_end_time'));
+      const totalMins = parseInt(localStorage.getItem('farm_total_mins'));
+      if (!endTime) return;
+
+      setInterval(() => {
+          const now = Math.floor(Date.now() / 1000);
+          const remaining = endTime - now;
+
+          if (remaining <= 0) {
+              document.getElementById('headerFarmBadge').style.display = 'none';
+              return;
+          }
+
+          let m = Math.floor(remaining / 60);
+          let s = remaining % 60;
+          let timeString = `${m < 10 ? '0' + m : m}:${s < 10 ? '0' + s : s}`;
+          
+          let totalSeconds = totalMins * 60;
+          let progress = (totalSeconds - remaining) / totalSeconds;
+          let plantIcon = '🌱';
+          if (progress >= 0.25 && progress < 0.65) plantIcon = '🌿';
+          else if (progress >= 0.65 && progress < 0.99) plantIcon = '🌳';
+          else if (progress >= 0.99) plantIcon = '🍎';
+
+          document.getElementById('headerFarmIcon').innerText = plantIcon;
+          document.getElementById('headerFarmCountdown').innerText = timeString;
+          document.getElementById('headerFarmBadge').style.display = 'flex';
+      }, 1000);
+  }
+
+  window.addEventListener('click', function(event) {
+      var sidebar = document.getElementById('settingsSidebar');
+      var toggleBtn = event.target.closest('button[title="الإعدادات"]');
+      
+      if (sidebar && sidebar.style.left === '0px') {
+          if (!sidebar.contains(event.target) && !toggleBtn) {
+              sidebar.style.left = '-320px';
+          }
+      }
+  });
+
+  function toggleTheme() {
+      const htmlRoot = document.getElementById('htmlRoot');
+      const checkbox = document.getElementById('themeSwitch');
+      
+      if (checkbox && checkbox.checked) {
+          htmlRoot.classList.remove('dark');
+          htmlRoot.classList.add('light');
+          localStorage.setItem('theme_mode', 'light');
+      } else {
+          htmlRoot.classList.remove('light');
+          htmlRoot.classList.add('dark');
+          localStorage.setItem('theme_mode', 'dark');
+      }
+  }
+
+  function toggleSidebar() {
+      var sidebar = document.getElementById('settingsSidebar');
+      if (sidebar) {
+          sidebar.style.left = (sidebar.style.left === '0px') ? '-320px' : '0px';
+      }
+  }
+
+  function handleKeyPress(e) {
+      if (e.key === 'Enter') {
+          sendTextMessage();
+      }
+  }
+
+  function sendTextMessage() {
+      const input = document.getElementById('messageInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      let formData = new FormData();
+      formData.append('group_id', groupId);
+      formData.append('message', text);
+
+      fetch('/send_message', {
+          method: 'POST',
+          body: formData
+      }).then(res => res.json()).then(data => {
+          if (data.status === 'success') {
+              input.value = '';
+              location.reload();
+          } else {
+              alert('حدث خطأ أثناء إرسال الرسالة.');
+          }
+      }).catch(err => console.error(err));
+  }
+
+  function uploadMediaMessage(inputElement) {
+      if (!inputElement.files || !inputElement.files[0]) return;
+
+      let file = inputElement.files[0];
+      let formData = new FormData();
+      formData.append('group_id', groupId);
+      formData.append('media_file', file);
+
+      fetch('/send_message', {
+          method: 'POST',
+          body: formData
+      }).then(res => res.json()).then(data => {
+          if (data.status === 'success') {
+              inputElement.value = '';
+              location.reload();
+          } else {
+              alert('فشل رفع الملف، تأكد من صحة الصيغة وحجم الملف.');
+          }
+      }).catch(err => {
+          console.error(err);
+          alert('حدث خطأ في الاتصال أثناء رفع الملف.');
+      });
+  }
+
+  // --- تأثير الأرقام والأكواد السيبرانية المتحركة (Kali Matrix Effect) ---
+  const canvas = document.getElementById('matrixCanvas');
+  const ctx = canvas.getContext('2d');
+
+  function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  const characters = '01010101010101010101ABCDEFsecuritykalirootAuraCode';
+  const fontSize = 16;
+  let columns = canvas.width / fontSize;
+  let drops = [];
+
+  for (let i = 0; i < columns; i++) {
+      drops[i] = 1;
+  }
+
+  function drawMatrix() {
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.12)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#10b981';
+      ctx.font = fontSize + 'px monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+          let text = characters.charAt(Math.floor(Math.random() * characters.length));
+          ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+          if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+              drops[i] = 0;
+          }
+          drops[i]++;
+      }
+  }
+
+  setInterval(drawMatrix, 50);
+</script>
+
+</body>
+</html>

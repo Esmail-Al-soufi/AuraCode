@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>الرد على المستخدم - AuraCode</title>
+</head>
+<body>
+    <h2>الرد على: {{ email }} - AuraCode</h2>
+    <form method="POST">
+        <label>عنوان الرسالة:</label><br>
+        <input type="text" name="subject" value="رد على استفسارك - AuraCode" required style="width: 100%; max-width: 400px;"><br><br>
+        
+        <label>نص الرد:</label><br>
+        <textarea name="message" rows="6" required style="width: 100%; max-width: 400px;"></textarea><br><br>
+        
+        <button type="submit">إرسال الرد</button>
+    </form>
+    <br>
+    <a href="/admin/messages">العودة للرسائل</a>
+</body>
+</html>

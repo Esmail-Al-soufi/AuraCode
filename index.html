@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - AuraCode</title>
+    <style>
+        .animated-letters-bg {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-letter {
+            position: absolute;
+            top: -12%;
+            font-family: 'Consolas', 'Courier New', 'Noto Sans JP', sans-serif;
+            font-weight: bold;
+            user-select: none;
+            color: rgba(56, 189, 248, 0.24);
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.18);
+            animation: driftLetter linear infinite;
+            will-change: transform, opacity;
+        }
+
+        html.light .floating-letter,
+        body.light-theme .floating-letter {
+            color: rgba(2, 132, 199, 0.22);
+            text-shadow: none;
+        }
+
+        @keyframes driftLetter {
+            0% {
+                transform: translate3d(0, -10vh, 0) rotate(0deg);
+                opacity: 0;
+            }
+            12% {
+                opacity: 0.9;
+            }
+            88% {
+                opacity: 0.9;
+            }
+            100% {
+                transform: translate3d(var(--drift-x, 24px), 112vh, 0) rotate(var(--rot-deg, 18deg));
+                opacity: 0;
+            }
+        }
+
+        .wrapper,
+        .developer-card {
+            position: relative;
+            z-index: 1;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-image: url('/static/13.jpg') !important;
+            background-size: cover !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+            background-attachment: fixed !important;
+            background-color: transparent !important;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .wrapper {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url('/static/13.jpg')!important;
+            background-size: cover;
+            background-position: center;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            max-width: 400px;
+            width: 90%;
+            padding: 35px 30px;
+            border-radius: 20px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 2rem auto;
+            position: relative;
+        }
+
+        .main-logo {
+            width: 220px;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 50%;
+            transition: transform 0.4s ease;
+            cursor: pointer;
+        }
+
+        .main-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-container::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: inherit;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.4;
+            animation: pulse 2s infinite;
+        }
+
+        .logo-container:hover {
+            transform: scale(1.05);
+        }
+
+        .input-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.8rem 1.2rem;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+            text-align: right;
+        }
+
+        .input-group input:focus {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: #6366f1;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+        }
+
+        .action-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 0.8rem;
+        }
+
+        .btn-login {
+            width: 45%;
+            margin-bottom: 0;
+            margin-left: 0;
+            margin-right: auto;
+            display: block;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 1.05rem;
+            border-radius: 8px;
+            border: none;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+            transform: translateY(-1px);
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 1.2rem 0;
+        }
+
+        .btn-outline, a.btn-outline {
+            background: rgba(255, 255, 255, 0.08) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            color: #ffffff !important;
+            display: block !important;
+            width: 100% !important;
+            text-decoration: none !important;
+            box-sizing: border-box !important;
+            text-align: center !important;
+            line-height: 45px !important;
+            border-radius: 12px !important;
+            margin-bottom: 10px !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .btn-outline:hover, a.btn-outline:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+            transform: translateY(-1px);
+        }
+
+        .btn-lang {
+            background: rgba(100, 116, 139, 0.2) !important;
+            border: 1px solid rgba(100, 116, 139, 0.4) !important;
+            color: #cbd5e1 !important;
+            width: 100%;
+            padding: 10px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-lang:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+            transform: translateY(-1px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.4; }
+            100% { transform: scale(1.25); opacity: 0; }
+        }
+
+        .developer-card {
+            position: fixed !important;
+            bottom: 45px !important;
+            left: 20px !important;
+            width: max-content !important;
+            background: rgba(15, 23, 42, 0.85) !important;
+            backdrop-filter: blur(10px) !important;
+            border: 1px solid rgba(0, 180, 216, 0.5) !important;
+            border-radius: 12px !important;
+            padding: 10px 16px !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 180, 216, 0.2) !important;
+            z-index: 99999 !important;
+            text-align: center !important;
+            direction: ltr !important;
+            unicode-bidi: bidi-override !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .developer-card p,
+        .developer-card a {
+            margin: 2px 0 !important;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+        }
+
+        .dev-title {
+            font-size: 0.75rem !important;
+            color: #64748b !important;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .dev-name {
+            font-size: 0.95rem !important;
+            color: #ffffff !important;
+            font-weight: bold !important;
+        }
+
+        .dev-phone-link {
+            display: inline-block !important;
+            text-decoration: none !important;
+            margin-top: 3px !important;
+        }
+
+        .dev-phone {
+            font-size: 0.8rem !important;
+            color: #00b4d8 !important;
+            font-weight: 500 !important;
+            cursor: pointer !important;
+        }
+
+        .dev-phone-link:hover .dev-phone {
+            text-decoration: underline !important;
+            color: #38bdf8 !important;
+        }
+
+        a.btn, a.btn-outline {
+            display: block !important;
+            width: 100% !important;
+            text-decoration: none !important;
+            box-sizing: border-box !important;
+            text-align: center !important;
+            line-height: 45px !important;
+            margin-bottom: 10px !important;
+        }
+
+        .page-stack {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            padding-bottom: 115px;
+        }
+
+        .page-stack .wrapper {
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .site-footer {
+            width: 90%;
+            max-width: 400px;
+            padding: 14px 18px;
+            border-radius: 16px;
+            background: rgba(15, 23, 42, 0.78);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+            color: #e2e8f0;
+            text-align: center;
+            font-size: 12.5px;
+            line-height: 1.7;
+        }
+
+        html.light .site-footer,
+        body.light-theme .site-footer {
+            background: rgba(255, 255, 255, 0.85);
+            color: #0f172a;
+            border-color: rgba(15, 23, 42, 0.14);
+        }
+
+        .site-footer-brand {
+            font-weight: 700;
+            color: #38bdf8;
+            font-size: 13.5px;
+        }
+
+        html.light .site-footer-brand,
+        body.light-theme .site-footer-brand {
+            color: #0284c7;
+        }
+
+        .site-footer-copy {
+            color: #94a3b8;
+            font-size: 11.5px;
+            margin-top: 2px;
+        }
+
+        html.light .site-footer-copy,
+        body.light-theme .site-footer-copy {
+            color: #475569;
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-letters-bg" id="animatedLettersBg" aria-hidden="true"></div>
+
+    <div class="page-stack">
+        <div class="wrapper">
+            <div class="logo-container" id="mainLogo">
+                <img src="/static/20.jpg" alt="AuraCode Logo" class="main-logo">
+            </div>
+
+            <form action="{{ url_for('login') }}" method="POST">
+                <div class="input-group">
+                    <input type="text" id="username" name="username" placeholder="اسم المستخدم" required>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" id="password" name="password" placeholder="كلمة المرور" required>
+                </div>
+
+                <div class="action-row">
+                    <a href="{{ url_for('forgot_password') }}" style="color: white; font-size: 12px; text-decoration: none;">نسيت كلمة المرور؟</a>
+                    <button type="button" class="btn btn-login" id="loginBtn">دخول</button>
+                </div>
+
+                <hr class="divider">
+
+                <button type="button" class="btn btn-outline" id="registerBtn">إنشاء حساب جديد</button>
+
+                <a href="{{ url_for('commun', **{'from': 'login'}) }}" class="btn btn-outline">تواصل معنا</a>
+
+                <a href="{{ url_for('about', **{'from': 'login'}) }}" class="btn btn-lang">نبذة عن المشروع 🔍</a>
+            </form>
+        </div>
+
+        <footer class="site-footer" aria-label="تذييل صفحة تسجيل الدخول">
+            <div class="site-footer-brand">AuraCode</div>
+            <div class="site-footer-copy">جميع الحقوق محفوظة © 2026</div>
+        </footer>
+    </div>
+
+    <div class="developer-card">
+        <p class="dev-title">Developed by</p>
+        <p class="dev-name">Esmail Al-Suofi</p>
+        <a href="tel:+967777821666" class="dev-phone-link" aria-label="الاتصال بالرقم +967 777821666">
+            <p class="dev-phone">+967 777821666</p>
+        </a>
+    </div>
+
+    <script>
+        function initAnimatedLetters() {
+            const container = document.getElementById('animatedLettersBg');
+            if (!container) return;
+
+            const glyphs = [
+                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+                'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+                'あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', 'こ', 'さ', 'し', 'す', 'せ', 'そ',
+                'た', 'ち', 'つ', 'て', 'と', 'な', 'に', 'ぬ', 'ね', 'の', 'は', 'ひ', 'ふ', 'へ', 'ほ',
+                'ア', 'イ', 'ウ', 'エ', 'オ', 'カ', 'キ', 'ク', 'ケ', 'コ', 'サ', 'シ', 'ス', 'セ', 'ソ',
+                'タ', 'チ', 'ツ', 'テ', 'ト', 'ナ', 'ニ', 'ヌ', 'ネ', 'ノ', 'ハ', 'ヒ', 'フ', 'ヘ', 'ホ'
+            ];
+            const count = window.innerWidth < 600 ? 22 : 38;
+
+            container.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const el = document.createElement('span');
+                el.className = 'floating-letter';
+                el.innerText = glyphs[Math.floor(Math.random() * glyphs.length)];
+
+                const leftPct = Math.random() * 98;
+                const fontSize = 15 + Math.floor(Math.random() * 16);
+                const duration = 9 + Math.random() * 11;
+                const delay = -(Math.random() * duration);
+                const driftX = (Math.random() * 70 - 35).toFixed(0) + 'px';
+                const rotDeg = (Math.random() * 44 - 22).toFixed(0) + 'deg';
+
+                el.style.left = `${leftPct}%`;
+                el.style.fontSize = `${fontSize}px`;
+                el.style.animationDuration = `${duration.toFixed(1)}s`;
+                el.style.animationDelay = `${delay.toFixed(1)}s`;
+                el.style.setProperty('--drift-x', driftX);
+                el.style.setProperty('--rot-deg', rotDeg);
+
+                container.appendChild(el);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedMode = localStorage.getItem('theme_mode') === 'light' ? 'light' : 'dark';
+            const htmlRoot = document.getElementById('htmlRoot');
+            if (htmlRoot) {
+                htmlRoot.classList.toggle('light', savedMode === 'light');
+                htmlRoot.classList.toggle('dark', savedMode !== 'light');
+            }
+            document.body.classList.toggle('light-theme', savedMode === 'light');
+            initAnimatedLetters();
+        });
+
+        window.addEventListener('resize', () => {
+            initAnimatedLetters();
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginBtn = document.getElementById('loginBtn');
+            const registerBtn = document.getElementById('registerBtn');
+            const contactBtn = document.getElementById('contactBtn');
+            const langBtn = document.getElementById('langBtn');
+
+            if (loginBtn) {
+                loginBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+
+                    const usernameInput = document.getElementById('username').value;
+                    const passwordInput = document.getElementById('password').value;
+
+                    if (!usernameInput || !passwordInput) {
+                        alert('يجب عليك اضافة اسم المستخدم وكلمة المرور');
+                        return;
+                    }
+
+                    const formData = new FormData();
+                    formData.append('username', usernameInput);
+                    formData.append('password', passwordInput);
+
+                    fetch('/login', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            window.location.href = data.redirect;
+                        } else {
+                            alert(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('حدث خطأ في الاتصال بالسرور');
+                    });
+                });
+            }
+
+            if (registerBtn) {
+                registerBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.location.href = '/register';
+                });
+            }
+
+            if (contactBtn) {
+                contactBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.location.href = '/commun';
+                });
+            }
+
+            if (langBtn) {
+                langBtn.addEventListener('click', () => {
+                    alert("ميزة تغيير اللغة ستتوفر قريباً Language switching feature will be available soon!");
+                });
+            }
+        });
+    </script>
+</body>
+</html>

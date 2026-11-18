@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>تم إرسال رابط الاستعادة - AuraCode</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>تم إرسال رابط الاستعادة - AuraCode</h2>
+        <p>لقد قمنا بإرسال رسالة إلى بريدك الإلكتروني تحتوي على رابط إعادة تعيين كلمة المرور في AuraCode.</p>
+        
+        <a href="{{ url_for('reset_password', token=token) }}" class="btn">الانتقال لتعيين كلمة المرور</a>
+    </div>
+</body>
+</html>

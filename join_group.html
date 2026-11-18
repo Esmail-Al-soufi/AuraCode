@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تقديم طلب انضمام - AuraCode</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --accent-blue: #38bdf8;
+            --accent-green: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --grid-pattern: linear-gradient(rgba(30, 41, 59, 0.4) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(30, 41, 59, 0.4) 1px, transparent 1px);
+        }
+
+        html.light {
+            --bg-dark: #f1f5f9;
+            --card-bg: #ffffff;
+            --accent-blue: #0284c7;
+            --accent-green: #059669;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+            --grid-pattern: linear-gradient(rgba(203, 213, 225, 0.4) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(203, 213, 225, 0.4) 1px, transparent 1px);
+        }
+
+        * {
+            transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease !important;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            direction: rtl;
+            background-image: var(--grid-pattern);
+            background-size: 20px 20px;
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 12px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .profile img {
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-blue);
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 30px auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
+        }
+
+        h2 {
+            color: var(--accent-blue);
+            text-align: center;
+            margin-top: 0;
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+        }
+
+        p {
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--text-main);
+        }
+
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 8px;
+            box-sizing: border-box;
+            outline: none;
+            font-size: 14px;
+        }
+
+        textarea:focus, input[type="text"]:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 8px rgba(56, 189, 248, 0.2);
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-submit:hover { opacity: 0.9; }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        .switch-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding: 12px 15px;
+            background: var(--bg-dark);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #475569;
+            transition: 0.4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider { background-color: var(--accent-blue); }
+        input:checked + .slider:before { transform: translateX(24px); }
+    </style>
+</head>
+<body>
+
+<header>
+  <div class="profile-section">
+    <div class="profile">
+      <img src="{{ url_for('static', filename=user_image) }}" alt="Profile">
+    </div>
+    <div>
+      <span style="display: block; font-size: 14px; font-weight: bold; color: var(--accent-blue);">{{ user_nickname }}</span>
+      <span style="font-size: 11px; color: var(--text-muted);">{{ user_fullname }}</span>
+    </div>
+  </div>
+  
+  <div style="font-size: 14px; color: var(--accent-green); font-weight: bold;">
+    AuraCode 🚀
+  </div>
+
+  <div>
+    <button onclick="toggleSidebar()" style="background: var(--border-color); color: var(--text-main); border: none; width: 40px; height: 40px; border-radius: 8px; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center;" title="الإعدادات">☰</button>
+  </div>
+</header>
+
+<div id="settingsSidebar" style="position: fixed; top: 0; left: -320px; width: 300px; height: 100%; background: var(--card-bg); box-shadow: -5px 0 25px rgba(0,0,0,0.3); padding: 20px; z-index: 1000; overflow-y: auto; border-left: 1px solid var(--border-color); transition: left 0.3s ease;">
+    <h3 style="color: var(--accent-blue);">إعدادات الحساب</h3>
+    
+    <div class="switch-container">
+        <span style="font-size: 14px; font-weight: bold;">🌙 وضع المظهر (فاتح/غامق)</span>
+        <label class="switch">
+            <input type="checkbox" id="themeSwitch" onchange="toggleTheme()">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <form action="/update_profile" method="POST" enctype="multipart/form-data">
+        <label style="color: var(--text-muted); font-size: 13px;">اللقب:</label>
+        <input type="text" name="nickname" style="width: 100%; margin-bottom: 15px; padding: 8px; background: var(--bg-dark); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 5px;" value="{{ user_nickname }}">
+        <button type="submit" style="width: 100%; background: var(--accent-blue); color: #fff; border: none; padding: 10px; cursor: pointer; font-weight: bold; border-radius: 5px;">تحديث اللقب</button>
+    </form>
+</div>
+
+<div class="container">
+    <h2>📝 تقديم طلب انضمام إلى: {{ group[1] }}</h2>
+    <p>{{ group[2] }}</p>
+    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 20px 0;">
+
+    <form method="POST">
+        {% if questions %}
+            {% for q in questions %}
+            <div class="form-group">
+                <label>{{ loop.index }}. {{ q[2] }}</label>
+                <textarea name="question_{{ q[0] }}" rows="3" placeholder="اكتب إجابتك هنا..." required></textarea>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: var(--accent-green); font-weight: bold;">لا توجد أسئلة لهذه المجموعة، يمكنك إرسال طلب الانضمام مباشرة!</p>
+        {% endif %}
+
+        <button type="submit" class="btn-submit">إرسال الطلب للمشرف 📩</button>
+    </form>
+
+    <div style="text-align: center;">
+        <a href="{{ url_for('view_groups') }}" class="back-link">← العودة إلى قائمة المجموعات</a>
+    </div>
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme_mode') || 'dark';
+      const htmlRoot = document.getElementById('htmlRoot');
+      const checkbox = document.getElementById('themeSwitch');
+      
+      if (htmlRoot) htmlRoot.className = savedTheme;
+      if (checkbox) checkbox.checked = (savedTheme === 'light');
+  });
+
+  window.addEventListener('click', function(event) {
+      var sidebar = document.getElementById('settingsSidebar');
+      var toggleBtn = event.target.closest('button[title="الإعدادات"]');
+      
+      if (sidebar && sidebar.style.left === '0px') {
+          if (!sidebar.contains(event.target) && !toggleBtn) {
+              sidebar.style.left = '-320px';
+          }
+      }
+  });
+
+  function toggleTheme() {
+      const htmlRoot = document.getElementById('htmlRoot');
+      const checkbox = document.getElementById('themeSwitch');
+      
+      if (checkbox && checkbox.checked) {
+          htmlRoot.classList.remove('dark');
+          htmlRoot.classList.add('light');
+          localStorage.setItem('theme_mode', 'light');
+      } else {
+          htmlRoot.classList.remove('light');
+          htmlRoot.classList.add('dark');
+          localStorage.setItem('theme_mode', 'dark');
+      }
+  }
+
+  function toggleSidebar() {
+      var sidebar = document.getElementById('settingsSidebar');
+      if (sidebar) {
+          sidebar.style.left = (sidebar.style.left === '0px') ? '-320px' : '0px';
+      }
+  }
+</script>
+
+</body>
+</html>
