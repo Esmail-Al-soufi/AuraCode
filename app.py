@@ -41,8 +41,8 @@ GEMINI_MIN_MINUTES = 10
 GEMINI_COST_PER_10_MIN = int(os.environ.get('GEMINI_COST_PER_10_MIN', '10'))
 
 # إعداد العميل الجديد لجوجل جيميناي من متغير البيئة
-GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
-client = genai.Client(api_key=GEMINI_API_KEY)
+GEMINI_API_KEY = (os.environ.get('GEMINI_API_KEY') or '').strip()
+client = genai.Client(api_key=GEMINI_API_KEY) if GEMINI_API_KEY else None
 
 # إعداد المجدول (Scheduler)
 scheduler = APScheduler()
