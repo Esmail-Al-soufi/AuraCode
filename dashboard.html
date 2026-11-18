@@ -32,6 +32,7 @@
   }
 
   * {
+    box-sizing: border-box;
     transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease !important;
   }
 
@@ -53,6 +54,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: nowrap;
+    gap: 10px;
     border-bottom: 1px solid var(--border-color);
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
   }
@@ -61,6 +64,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
+    flex-shrink: 0;
   }
 
   .profile img {
@@ -85,6 +89,7 @@
     color: var(--accent-green);
     box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
     animation: pulseGlow 2s infinite;
+    white-space: nowrap;
   }
 
   @keyframes pulseGlow {
@@ -97,6 +102,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
+    flex-shrink: 0;
   }
 
   .coin-badge {
@@ -111,10 +117,27 @@
     align-items: center;
     gap: 6px;
     box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+    white-space: nowrap;
+  }
+
+  .sidebar-toggle-btn {
+    background: var(--border-color);
+    color: var(--text-main);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
   }
 
   .logo-container {
     flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -153,12 +176,15 @@
     background: var(--card-bg);
     backdrop-filter: blur(15px);
     display: flex;
+    flex-wrap: nowrap;
     gap: 12px;
     padding: 10px 20px;
     border-radius: 35px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2), 0 0 15px rgba(56, 189, 248, 0.1);
     z-index: 999;
     border: 1px solid var(--border-color);
+    max-width: calc(100% - 16px);
+    overflow-x: auto;
   }
 
   .circle-tab-btn {
@@ -174,6 +200,7 @@
     align-items: center;
     justify-content: center;
     position: relative;
+    flex-shrink: 0;
   }
 
   .circle-tab-btn:hover {
@@ -378,7 +405,6 @@
     font-size: 13px;
     font-weight: bold;
     margin-bottom: 20px;
-    box-sizing: border-box;
   }
 
   @keyframes spinWobbleTouch {
@@ -553,12 +579,6 @@
     min-height: 240px;
   }
 
-  @media (max-width: 720px) {
-    .auracode-workspace {
-      grid-template-columns: 1fr;
-    }
-  }
-
   .auracode-sidebar {
     background: #0f172a;
     border-left: 1px solid #1e293b;
@@ -596,7 +616,6 @@
     line-height: 1.6;
     outline: none;
     resize: vertical;
-    box-sizing: border-box;
     direction: ltr;
     text-align: left;
   }
@@ -615,7 +634,6 @@
     text-align: left;
   }
 
-  /* مساعد الذكاء الاصطناعي الذكي بأسلوب اكتي كود بشروط AuraCode */
   .acticode-ai-panel {
     background: #0b1120;
     border: 1px solid rgba(139, 92, 246, 0.45);
@@ -861,66 +879,104 @@
     line-height: 1.7;
   }
 
+  /* الحفاظ على نفس توزيع وهيئة اللابتوب على شاشة الهاتف */
   @media (max-width: 768px) {
-  body {
-    padding-bottom: 105px;
-  }
+    body {
+      padding-bottom: 95px;
+    }
 
-  header {
-    flex-wrap: wrap;
-    gap: 10px;
-    padding: 10px 12px;
-  }
+    header {
+      flex-wrap: nowrap;
+      gap: 6px;
+      padding: 8px 10px;
+    }
 
-  .logo-container {
-    order: 3;
-    flex: 1 1 100%;
-    margin-top: 4px;
-  }
+    .profile-section {
+      gap: 6px;
+    }
 
-  .news-ticker {
-    max-width: 100%;
-    font-size: 11px;
-    padding: 4px 10px;
-  }
+    .profile img,
+    .main-logo {
+      width: 34px;
+      height: 34px;
+    }
 
-  .header-right-section {
-    gap: 8px;
-  }
+    .logo-container {
+      flex: 1;
+      min-width: 0;
+    }
 
-  .coin-badge {
-    padding: 5px 10px;
-    font-size: 12px;
-  }
+    .news-ticker {
+      max-width: 120px;
+      font-size: 10px;
+      padding: 3px 7px;
+      margin-top: 3px;
+    }
 
-  .floating-bottom-nav {
-    width: calc(100% - 16px);
-    max-width: 460px;
-    bottom: 10px;
-    padding: 8px 10px;
-    gap: 6px;
-    justify-content: space-between;
-    border-radius: 26px;
-  }
+    .header-right-section {
+      gap: 5px;
+    }
 
-  .circle-tab-btn {
-    width: 36px;
-    height: 36px;
-    font-size: 15px;
-    flex-shrink: 0;
-  }
+    .coin-badge {
+      padding: 4px 8px;
+      font-size: 10.5px;
+      gap: 3px;
+    }
 
-  .tab-content {
-    padding: 14px 12px;
-  }
+    .header-farm-timer {
+      padding: 4px 8px;
+      font-size: 10.5px;
+    }
 
-  .section-box {
-    padding: 16px;
+    .sidebar-toggle-btn {
+      width: 32px;
+      height: 32px;
+      font-size: 15px;
+    }
+
+    .floating-bottom-nav {
+      width: auto;
+      max-width: calc(100% - 14px);
+      bottom: 12px;
+      padding: 7px 12px;
+      gap: 7px;
+      justify-content: center;
+      border-radius: 30px;
+    }
+
+    .circle-tab-btn {
+      width: 36px;
+      height: 36px;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .tab-content {
+      padding: 16px 12px;
+    }
+
+    .section-box {
+      padding: 18px 14px;
+    }
+
+    .groups-grid {
+      grid-template-columns: repeat(2, minmax(140px, 1fr));
+      gap: 10px;
+    }
+
+    .group-card {
+      padding: 12px;
+    }
+
+    .group-card-img {
+      width: 34px;
+      height: 34px;
+    }
+
+    .auracode-workspace {
+      grid-template-columns: 165px 1fr;
+    }
   }
-}
-#farmNoticeModal {
-  display: none !important;
-}
 </style>
 </head>
 <body>
@@ -970,11 +1026,12 @@
       </div>
     </div>
     <div style="display: flex; gap: 8px; align-items: center;">
-      <button onclick="enterFarmNow()" class="btn-primary" style="padding: 7px 14px; font-size: 12px;">الآن 🌱</button>
-      <button onclick="dismissEnterFarmPrompt()" style="background: var(--bg-dark); color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 7px; padding: 6px 12px; cursor: pointer; font-size: 12px;">لاحقاً</button>
+      <button type="button" onclick="enterFarmNow()" class="btn-primary" style="padding: 7px 14px; font-size: 12px;">الآن 🌱</button>
+      <button type="button" onclick="dismissEnterFarmPrompt()" style="background: var(--bg-dark); color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 7px; padding: 6px 12px; cursor: pointer; font-size: 12px;">لاحقاً</button>
     </div>
   </div>
 </div>
+
 <header>
   <div class="profile-section">
     <div class="profile">
@@ -983,7 +1040,7 @@
             <img src="{{ url_for('static', filename=user_image ) }}" alt="Profile" class="main-logo" width="45" onerror="this.src='/static/default_group.png'">
         </label>
         <input id="file-input" type="file" name="profile_pic" style="display: none;" onchange="this.form.submit()">
-        <span style="display: block; font-size: 12px; margin-top: 4px; color: var(--accent-blue);">{{ user_nickname }}</span>
+        <span style="display: block; font-size: 11px; margin-top: 2px; color: var(--accent-blue); white-space: nowrap;">{{ user_nickname }}</span>
       </form>
     </div>
 
@@ -1004,14 +1061,14 @@
     <div class="coin-badge" title="رصيدك الحالي من عملة E-Coin">
       🪙 <span id="headerCoinBalance">0</span> E-Coin
     </div>
-    <button onclick="toggleSidebar()" style="background: var(--border-color); color: var(--text-main); border: none; width: 40px; height: 40px; border-radius: 8px; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center;" title="الإعدادات">☰</button>
+    <button type="button" class="sidebar-toggle-btn" onclick="toggleSidebar()" title="الإعدادات">☰</button>
   </div>
 </header>
 
 <div id="settingsSidebar" style="position: fixed; top: 0; left: -320px; width: 300px; height: 100%; background: var(--card-bg); box-shadow: -5px 0 25px rgba(0,0,0,0.3); padding: 20px; z-index: 1000; overflow-y: auto; border-left: 1px solid var(--border-color);">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
         <h3 style="color: var(--accent-blue); margin: 0;">إعدادات الحساب</h3>
-        <button onclick="toggleSidebar()" class="touch-spin-close" title="إغلاق القائمة">
+        <button type="button" onclick="toggleSidebar()" class="touch-spin-close" title="إغلاق القائمة">
             <span>✖</span> إغلاق
         </button>
     </div>
@@ -1057,19 +1114,19 @@
 </div>
 
 <div class="floating-bottom-nav">
-  <button class="circle-tab-btn active" id="chatTabBtn" title="المجموعات" onclick="switchTab('chatTab', event)">👥</button>
+  <button type="button" class="circle-tab-btn active" id="chatTabBtn" title="المجموعات" onclick="switchTab('chatTab', event)">👥</button>
   
-  <button class="circle-tab-btn" id="notifTabBtn" title="الإشعارات والردود" onclick="switchTab('notifTab', event)">
+  <button type="button" class="circle-tab-btn" id="notifTabBtn" title="الإشعارات والردود" onclick="switchTab('notifTab', event)">
       🔔 <span id="notifBadge" class="notif-red-dot"></span>
   </button>
 
-  <button class="circle-tab-btn" id="farmTabBtn" title="الحظيرة الخضراء" onclick="switchTab('farmTab', event)">🌱</button>
-  <button class="circle-tab-btn" title="سوق ومتجر E-Coin" onclick="switchTab('storeTab', event)">🛒</button>
-  <button class="circle-tab-btn" id="aiTabBtn" title="مساعد اكتي كود الذكي — AuraCode" onclick="switchTab('aiTab', event)">🤖</button>
+  <button type="button" class="circle-tab-btn" id="farmTabBtn" title="الحظيرة الخضراء" onclick="switchTab('farmTab', event)">🌱</button>
+  <button type="button" class="circle-tab-btn" title="سوق ومتجر E-Coin" onclick="switchTab('storeTab', event)">🛒</button>
+  <button type="button" class="circle-tab-btn" id="aiTabBtn" title="مساعد اكتي كود الذكي — AuraCode" onclick="switchTab('aiTab', event)">🤖</button>
   
-  <button class="circle-tab-btn" id="envTabBtn" style="display: none;" title="بيئة AuraCode" onclick="switchTab('envTab', event)">💻</button>
-  <button class="circle-tab-btn" id="refsTabBtn" style="display: none;" title="المراجع والمصادر" onclick="switchTab('refsTab', event)">📚</button>
-  <button class="circle-tab-btn" title="التقييم" onclick="switchTab('ratingTab', event)">⭐</button>
+  <button type="button" class="circle-tab-btn" id="envTabBtn" style="display: none;" title="بيئة AuraCode" onclick="switchTab('envTab', event)">💻</button>
+  <button type="button" class="circle-tab-btn" id="refsTabBtn" style="display: none;" title="المراجع والمصادر" onclick="switchTab('refsTab', event)">📚</button>
+  <button type="button" class="circle-tab-btn" title="التقييم" onclick="switchTab('ratingTab', event)">⭐</button>
 </div>
 
 <div id="chatTab" class="tab-content active">
@@ -1130,7 +1187,7 @@
       <label style="font-size: 14px; font-weight: bold; color: var(--text-main);">حدد مدة جلسة الدراسة (بالدقائق):</label><br>
       <input type="number" id="focusMinutes" min="1" max="180" value="10" style="padding: 10px; width: 120px; border-radius: 8px; background: var(--bg-dark); color: var(--text-main); border: 1px solid var(--border-color); text-align: center; font-size: 16px; margin-top: 8px; font-weight: bold;">
       <br>
-      <button onclick="startFocusSession()" class="btn-primary" style="margin-top: 15px; font-size: 15px; padding: 10px 25px;">بدء زراعة نبتة جديدة في الحظيرة الخضراء 🚀</button>
+      <button type="button" onclick="startFocusSession()" class="btn-primary" style="margin-top: 15px; font-size: 15px; padding: 10px 25px;">بدء زراعة نبتة جديدة في الحظيرة الخضراء 🚀</button>
     </div>
 
     <div>
@@ -1143,7 +1200,7 @@
       <div id="activePlantStage" class="plant-icon" style="margin: 10px 0;">🌱</div>
       <div id="timerDisplay" class="timer-display">00:00</div>
       <p id="farmStatusMsg" style="margin-top: 5px; color: var(--text-muted); font-size: 13px;">جاهز لبدء جلسة جديدة</p>
-      <button id="cancelFocusBtn" onclick="killPlant('استسلمت وخرجت بنفسك!')" style="display: none; background: #ef4444; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; margin-top: 10px;">إلغاء الجلسة (قتل النبتة الحالية 🥀)</button>
+      <button type="button" id="cancelFocusBtn" onclick="killPlant('استسلمت وخرجت بنفسك!')" style="display: none; background: #ef4444; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; margin-top: 10px;">إلغاء الجلسة (قتل النبتة الحالية 🥀)</button>
     </div>
   </div>
 </div>
@@ -1159,7 +1216,7 @@
         <input type="text" id="newItemName" placeholder="اسم الأداة أو السكربت..." style="padding: 10px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 6px;">
         <input type="text" id="newItemDesc" placeholder="وصف الأداة..." style="padding: 10px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 6px;">
         <input type="number" id="newItemPrice" placeholder="السعر بـ E-Coin" style="padding: 10px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 6px;">
-        <button class="btn-primary" onclick="listNewItemForSale()">عرض الأداة للبيع 🏷️</button>
+        <button type="button" class="btn-primary" onclick="listNewItemForSale()">عرض الأداة للبيع 🏷️</button>
       </div>
     </div>
 
@@ -1273,7 +1330,7 @@
     </div>
     <textarea id="ratingFeedback" style="width: 100%; max-width: 400px; height: 80px; padding: 10px; border-radius: 6px; background: var(--bg-dark); color: var(--text-main); border: 1px solid var(--border-color);" placeholder="اكتب ملاحظاتك أو اقتراحاتك هنا..."></textarea>
     <br>
-    <button class="btn-primary" style="margin-top: 15px;" onclick="submitRating()">إرسال التقييم 🚀</button>
+    <button type="button" class="btn-primary" style="margin-top: 15px;" onclick="submitRating()">إرسال التقييم 🚀</button>
     <p id="rating-msg" style="margin-top: 10px; font-weight: bold; color: var(--accent-green);"></p>
   </div>
 </div>
@@ -2058,7 +2115,8 @@
   }
 
   function closeFarmModal() {
-      document.getElementById('farmNoticeModal').style.display = 'none';
+      const m = document.getElementById('farmNoticeModal');
+      if (m) m.style.display = 'none';
   }
 
   function goToFarmTab() {
@@ -2130,7 +2188,8 @@
       showEnterFarmPrompt(8000);
 
       if (!localStorage.getItem('farm_visited_' + currentUser)) {
-          document.getElementById('farmNoticeModal').style.display = 'flex';
+          const farmModal = document.getElementById('farmNoticeModal');
+          if (farmModal) farmModal.style.display = 'flex';
       }
 
       if (localStorage.getItem('farm_end_time')) {
@@ -2804,7 +2863,7 @@
                   </div>
                   <p style="font-weight: bold; color: var(--accent-green); margin-top: 5px;">السعر: ${item.price} E-Coin</p>
               </div>
-              <button class="btn-primary" style="margin-top: 10px;" onclick="buyMarketItem(${item.id})">شراء الأداة 🛒</button>
+              <button type="button" class="btn-primary" style="margin-top: 10px;" onclick="buyMarketItem(${item.id})">شراء الأداة 🛒</button>
           `;
           container.appendChild(card);
       });

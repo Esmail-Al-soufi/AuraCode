@@ -30,6 +30,7 @@
         }
 
         * {
+            box-sizing: border-box;
             transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease !important;
         }
 
@@ -43,6 +44,7 @@
             background-image: var(--grid-pattern);
             background-size: 20px 20px;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         header {
@@ -52,6 +54,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: nowrap;
+            gap: 10px;
             border-bottom: 1px solid var(--border-color);
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
@@ -60,6 +64,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            min-width: 0;
         }
 
         .profile img {
@@ -68,6 +73,29 @@
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--accent-blue);
+            flex-shrink: 0;
+        }
+
+        .header-brand-label {
+            font-size: 14px;
+            color: var(--accent-green);
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .sidebar-toggle-btn {
+            background: var(--border-color);
+            color: var(--text-main);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
 
         .container {
@@ -210,6 +238,72 @@
 
         input:checked + .slider { background-color: var(--accent-blue); }
         input:checked + .slider:before { transform: translateX(24px); }
+
+        /* الحفاظ على نفس توزيع وهيئة اللابتوب على شاشة الهاتف */
+        @media (max-width: 768px) {
+            header {
+                flex-wrap: nowrap;
+                gap: 8px;
+                padding: 10px 12px;
+            }
+
+            .profile-section {
+                gap: 8px;
+            }
+
+            .profile img {
+                width: 34px;
+                height: 34px;
+            }
+
+            .header-brand-label {
+                font-size: 12px;
+            }
+
+            .sidebar-toggle-btn {
+                width: 34px;
+                height: 34px;
+                font-size: 16px;
+            }
+
+            .container {
+                margin: 14px 10px;
+                padding: 18px 14px;
+                border-radius: 12px;
+            }
+
+            h2 {
+                font-size: 18px;
+            }
+
+            p {
+                font-size: 12.5px;
+            }
+
+            .groups-grid {
+                grid-template-columns: repeat(2, minmax(140px, 1fr));
+                gap: 10px;
+                margin-top: 18px;
+            }
+
+            .group-card {
+                padding: 12px;
+            }
+
+            .group-card h3 {
+                font-size: 14px;
+            }
+
+            .group-card p {
+                font-size: 12px;
+            }
+
+            .btn-join {
+                padding: 8px;
+                font-size: 12px;
+                margin-top: 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -219,18 +313,18 @@
     <div class="profile">
       <img src="{{ url_for('static', filename=user_image) }}" alt="Profile">
     </div>
-    <div>
-      <span style="display: block; font-size: 14px; font-weight: bold; color: var(--accent-blue);">{{ user_nickname }}</span>
-      <span style="font-size: 11px; color: var(--text-muted);">{{ user_fullname }}</span>
+    <div style="min-width: 0;">
+      <span style="display: block; font-size: 13px; font-weight: bold; color: var(--accent-blue); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ user_nickname }}</span>
+      <span style="display: block; font-size: 10.5px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ user_fullname }}</span>
     </div>
   </div>
   
-  <div style="font-size: 14px; color: var(--accent-green); font-weight: bold;">
+  <div class="header-brand-label">
     AuraCode 🚀
   </div>
 
   <div>
-    <button onclick="toggleSidebar()" style="background: var(--border-color); color: var(--text-main); border: none; width: 40px; height: 40px; border-radius: 8px; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center;" title="الإعدادات">☰</button>
+    <button type="button" class="sidebar-toggle-btn" onclick="toggleSidebar()" title="الإعدادات">☰</button>
   </div>
 </header>
 

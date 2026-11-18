@@ -34,6 +34,7 @@
         }
 
         * {
+            box-sizing: border-box;
             transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease !important;
         }
 
@@ -157,7 +158,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             gap: 10px;
         }
 
@@ -168,6 +169,23 @@
         }
 
         p { color: var(--text-muted); }
+
+        .inline-input-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: nowrap;
+            align-items: center;
+        }
+
+        .inline-input-row > input {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .inline-input-row > button {
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
 
         table {
             width: 100%;
@@ -202,6 +220,7 @@
             display: inline-block;
             font-weight: bold;
             font-size: 12px;
+            white-space: nowrap;
         }
 
         .btn-edit {
@@ -213,6 +232,7 @@
             font-size: 12px;
             border: none;
             cursor: pointer;
+            white-space: nowrap;
         }
 
         .btn-reject, .btn-delete {
@@ -226,16 +246,19 @@
             font-size: 12px;
             border: none;
             cursor: pointer;
+            white-space: nowrap;
         }
 
         .reply-section {
             margin-top: 8px;
             display: flex;
             gap: 5px;
+            flex-wrap: nowrap;
         }
 
         .reply-section input {
             flex: 1;
+            min-width: 110px;
             padding: 5px 8px;
             background: var(--bg-dark);
             border: 1px solid var(--border-color);
@@ -254,6 +277,7 @@
             cursor: pointer;
             font-weight: bold;
             font-size: 12px;
+            white-space: nowrap;
         }
 
         .section-box {
@@ -300,6 +324,7 @@
             cursor: pointer;
             font-weight: bold;
             font-size: 14px;
+            white-space: nowrap;
         }
 
         .welcome-notif-card {
@@ -312,7 +337,7 @@
             border-radius: 8px;
             padding: 10px 14px;
             margin-top: 10px;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
         }
 
         .join-q-item-card {
@@ -325,7 +350,7 @@
             border-radius: 8px;
             padding: 10px 14px;
             margin-top: 8px;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
         }
 
         .quiz-question-builder-card {
@@ -338,8 +363,8 @@
 
         .quiz-options-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 8px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
             margin-top: 10px;
         }
 
@@ -350,6 +375,7 @@
             object-fit: cover;
             border: 2px solid var(--accent-blue);
             background: var(--bg-dark);
+            flex-shrink: 0;
         }
 
         .back-link {
@@ -357,13 +383,15 @@
             text-decoration: none;
             font-size: 14px;
             font-weight: bold;
+            white-space: nowrap;
         }
         .back-link:hover { text-decoration: underline; }
 
         .switch-container {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            flex-shrink: 0;
         }
 
         .switch {
@@ -420,57 +448,145 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.6);
         }
 
+        /* الحفاظ على نفس توزيع وهيئة اللابتوب على شاشة الهاتف */
         @media (max-width: 768px) {
-  header {
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 8px 12px;
-  }
+            body {
+                padding: 8px 6px;
+                background-size: 16px 16px;
+            }
 
-  .header-status-badges {
-    gap: 8px;
-  }
+            .admin-top-tabs {
+                top: 6px;
+                margin-bottom: 10px;
+                padding: 6px 8px;
+                gap: 5px;
+                border-radius: 10px;
+            }
 
-  .chat-container {
-    margin: 8px;
-    border-radius: 10px;
-  }
+            .admin-tab-link {
+                padding: 5px 9px;
+                font-size: 11px;
+                gap: 4px;
+            }
 
-  .message-bubble {
-    max-width: 85%;
-    padding: 10px 12px;
-  }
+            .admin-tab-badge {
+                font-size: 10px;
+                padding: 1px 5px;
+            }
 
-  .chat-input-area {
-    padding: 10px;
-    gap: 6px;
-  }
+            .container {
+                padding: 12px;
+                margin: 8px auto 18px auto;
+                border-radius: 10px;
+            }
 
-  .btn-send {
-    padding: 9px 14px;
-    font-size: 13px;
-  }
-}
-@media (max-width: 768px) {
-  body {
-    padding: 10px;
-  }
+            .header-flex {
+                gap: 6px;
+                margin-bottom: 12px;
+                overflow-x: auto;
+            }
 
-  .container {
-    padding: 16px;
-  }
+            .back-link {
+                font-size: 11.5px;
+            }
 
-  .section-box {
-    padding: 14px;
-    overflow-x: auto;
-  }
+            .switch {
+                width: 38px;
+                height: 20px;
+            }
 
-  table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-}
+            .slider:before {
+                height: 14px;
+                width: 14px;
+                left: 3px;
+                bottom: 3px;
+            }
+
+            input:checked + .slider:before {
+                transform: translateX(18px);
+            }
+
+            h2 {
+                font-size: 17px;
+                line-height: 1.4;
+            }
+
+            h3 {
+                font-size: 15px;
+                line-height: 1.4;
+            }
+
+            h4 {
+                font-size: 13.5px;
+            }
+
+            p {
+                font-size: 12px;
+                line-height: 1.5;
+            }
+
+            .section-box {
+                padding: 12px;
+                margin-top: 18px;
+                border-radius: 8px;
+                overflow-x: auto;
+            }
+
+            .form-group label {
+                font-size: 12px;
+            }
+
+            .form-group input[type="text"],
+            .form-group input[type="number"],
+            .form-group input[type="datetime-local"],
+            .form-group textarea,
+            .form-group input[type="password"],
+            .form-group select {
+                padding: 7px 8px;
+                font-size: 12px;
+            }
+
+            .btn-submit-group {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            .btn-edit,
+            .btn-delete,
+            .btn-approve,
+            .btn-reject,
+            .btn-reply {
+                padding: 5px 8px;
+                font-size: 11px;
+            }
+
+            .quiz-options-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 6px;
+            }
+
+            .welcome-notif-card,
+            .join-q-item-card {
+                padding: 8px 10px;
+                gap: 6px;
+            }
+
+            .group-thumb-preview {
+                width: 32px;
+                height: 32px;
+            }
+
+            th, td {
+                padding: 7px 8px;
+                font-size: 11.5px;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
     </style>
 </head>
 <body>
@@ -618,15 +734,15 @@
 <div class="container" id="adminMainContainer">
     <div class="header-flex">
         <a href="{{ url_for('login') }}" class="back-link">← العودة إلى صفحة تسجيل الدخول</a>
-        <div style="display: flex; align-items: center; gap: 15px;">
+        <div style="display: flex; align-items: center; gap: 12px; flex-shrink: 0;">
             <div class="switch-container">
-                <span style="font-size: 13px; font-weight: bold;">🌙 المظهر</span>
+                <span style="font-size: 12px; font-weight: bold; white-space: nowrap;">🌙 المظهر</span>
                 <label class="switch">
                     <input type="checkbox" id="themeSwitch" onchange="toggleTheme()">
                     <span class="slider"></span>
                 </label>
             </div>
-            <a href="{{ url_for('admin_logout') }}" class="btn-delete" style="padding: 8px 14px;">قفل اللوحة وخروج 🔒</a>
+            <a href="{{ url_for('admin_logout') }}" class="btn-delete" style="padding: 7px 12px;">قفل اللوحة وخروج 🔒</a>
         </div>
     </div>
 
@@ -651,10 +767,10 @@
         <div style="margin-top: 22px; padding-top: 16px; border-top: 1px dashed var(--border-color);">
             <div class="form-group">
                 <label>إضافة إشعار ترحيبي جديد أو تعديل إشعار حالي:</label>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <input type="text" id="welcomeNotifTextInput" style="flex: 1; min-width: 220px;" placeholder="اكتب نص الإشعار الترحيبي...">
-                    <button type="button" id="welcomeNotifSaveBtn" class="btn-edit" style="background: var(--accent-purple); padding: 9px 16px;" onclick="saveWelcomeNotif()">➕ إضافة إشعار ترحيبي</button>
-                    <button type="button" id="welcomeNotifCancelBtn" class="btn-delete" style="display: none; padding: 9px 14px;" onclick="cancelWelcomeNotifEdit()">إلغاء</button>
+                <div class="inline-input-row">
+                    <input type="text" id="welcomeNotifTextInput" placeholder="اكتب نص الإشعار الترحيبي...">
+                    <button type="button" id="welcomeNotifSaveBtn" class="btn-edit" style="background: var(--accent-purple); padding: 9px 14px;" onclick="saveWelcomeNotif()">➕ إضافة إشعار ترحيبي</button>
+                    <button type="button" id="welcomeNotifCancelBtn" class="btn-delete" style="display: none; padding: 9px 12px;" onclick="cancelWelcomeNotifEdit()">إلغاء</button>
                 </div>
             </div>
 
@@ -681,10 +797,10 @@
 
         <div class="form-group">
             <label>نص سؤال المقابلة:</label>
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                <input type="text" id="joinQuestionTextInput" style="flex: 1; min-width: 220px;" placeholder="مثال: ما هدفك من الانضمام إلى هذه المجموعة؟" onkeydown="if(event.key==='Enter'){event.preventDefault();saveJoinQuestionItem();}">
-                <button type="button" id="joinQuestionSaveBtn" class="btn-edit" style="padding: 9px 16px;" onclick="saveJoinQuestionItem()">➕ إضافة سؤال</button>
-                <button type="button" id="joinQuestionCancelBtn" class="btn-delete" style="display: none; padding: 9px 14px;" onclick="cancelJoinQuestionEdit()">إلغاء</button>
+            <div class="inline-input-row">
+                <input type="text" id="joinQuestionTextInput" placeholder="مثال: ما هدفك من الانضمام إلى هذه المجموعة؟" onkeydown="if(event.key==='Enter'){event.preventDefault();saveJoinQuestionItem();}">
+                <button type="button" id="joinQuestionSaveBtn" class="btn-edit" style="padding: 9px 14px;" onclick="saveJoinQuestionItem()">➕ إضافة سؤال</button>
+                <button type="button" id="joinQuestionCancelBtn" class="btn-delete" style="display: none; padding: 9px 12px;" onclick="cancelJoinQuestionEdit()">إلغاء</button>
             </div>
         </div>
 
@@ -699,11 +815,11 @@
 
     <!-- قسم إدارة وإطلاق الكويز المفاجئ -->
     <div id="sec-quiz" class="section-box section-anchor" style="margin-top: 20px; border-color: var(--accent-purple);">
-        <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: nowrap;">
             <h3 style="margin: 0; color: #c4b5fd;">🎯 إدارة الكويز المفاجئ (Surprise Quiz)</h3>
-            <label style="display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: bold; cursor: pointer;">
+            <label style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: bold; cursor: pointer; white-space: nowrap;">
                 <input type="checkbox" id="quizActiveCheckbox">
-                <span>تفعيل الكويز للمستخدمين الآن</span>
+                <span>تفعيل الكويز الآن</span>
             </label>
         </div>
         <p style="margin-top: 8px; font-size: 13px;">أنشئ أسئلة اختيار من متعدد وحدد المدة الزمنية وموعد البدء (لتنبيه المستخدم قبل الكويز بساعة) ومكافأة عملات <strong>E-Coin</strong>.</p>
@@ -729,10 +845,10 @@
 
         <div id="quizQuestionsBuilderContainer" style="margin-top: 14px;"></div>
 
-        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px;">
-            <button type="button" class="btn-edit" style="background: var(--accent-blue); padding: 9px 16px;" onclick="addQuizQuestionCard()">➕ إضافة سؤال جديد</button>
+        <div style="display: flex; gap: 8px; flex-wrap: nowrap; margin-top: 16px; overflow-x: auto;">
+            <button type="button" class="btn-edit" style="background: var(--accent-blue); padding: 9px 14px;" onclick="addQuizQuestionCard()">➕ إضافة سؤال جديد</button>
             <button type="button" class="btn-submit-group" style="background: linear-gradient(135deg, #7c3aed, #8b5cf6);" onclick="saveSurpriseQuizConfig()">🚀 حفظ ونشر الكويز المفاجئ</button>
-            <button type="button" class="btn-delete" style="padding: 9px 16px;" onclick="disableSurpriseQuiz()">⏸️ إيقاف الكويز</button>
+            <button type="button" class="btn-delete" style="padding: 9px 14px;" onclick="disableSurpriseQuiz()">⏸️ إيقاف الكويز</button>
         </div>
 
         <div id="quizManagerFeedback" style="margin-top: 12px; font-size: 13px; font-weight: bold; color: var(--accent-green);"></div>
@@ -756,14 +872,13 @@
                 <label>السعر (E-Coin):</label>
                 <input type="number" id="adminMarketPriceInput" min="1" placeholder="50">
             </div>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label>وصف العنصر:</label>
+                <input type="text" id="adminMarketDescInput" placeholder="وصف مختصر للعنصر...">
+            </div>
         </div>
 
-        <div class="form-group" style="margin-top: 12px;">
-            <label>وصف العنصر:</label>
-            <input type="text" id="adminMarketDescInput" placeholder="وصف مختصر للعنصر...">
-        </div>
-
-        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <div style="display: flex; gap: 10px; flex-wrap: nowrap; margin-top: 14px;">
             <button type="button" class="btn-submit-group" onclick="addAdminMarketItem()">➕ إضافة عنصر للشراء والبيع</button>
             <button type="button" class="btn-reply" onclick="renderAdminMarketTable()">🔄 تحديث القائمة</button>
         </div>
@@ -773,7 +888,7 @@
     </div>
 
     <div id="sec-activity" class="section-box section-anchor" style="margin-top: 20px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: nowrap;">
             <h3 style="margin: 0;">📊 سجل نشاط المستخدمين (عناوين IP وأوقات الدخول والخروج ومدة الجلوس)</h3>
             <button type="button" class="btn-reply" onclick="refreshUsersActivityTable()">🔄 تحديث السجل</button>
         </div>
@@ -836,7 +951,7 @@
                             </div>
                         </td>
                         <td>
-                            <div style="display: flex; gap: 5px;">
+                            <div style="display: flex; gap: 5px; flex-wrap: nowrap;">
                                 <a href="{{ url_for('approve_request', request_id=req[0]) }}" class="btn-approve">موافقة ✅</a>
                                 <a href="{{ url_for('reject_request', request_id=req[0]) }}" class="btn-reject">رفض ❌</a>
                             </div>
@@ -866,7 +981,7 @@
                     {% set raw_icon = g[3] if g|length > 3 and g[3] else 'default_group.png' %}
                     <tr>
                         <td>
-                            <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: nowrap;">
                                 <img src="{{ raw_icon if raw_icon.startswith('/') or raw_icon.startswith('http') else url_for('static', filename=raw_icon) }}"
                                      alt="{{ g[1] }}"
                                      class="group-thumb-preview group-row-img"
@@ -877,7 +992,7 @@
                         </td>
                         <td class="group-row-desc">{{ g[2] }}</td>
                         <td>
-                            <div style="display: flex; gap: 6px;">
+                            <div style="display: flex; gap: 6px; flex-wrap: nowrap;">
                                 <button type="button" class="btn-edit"
                                     data-group-id="{{ g[0] }}"
                                     onclick="openEditModalFromBtn(this)">تعديل ✏️</button>
@@ -912,7 +1027,7 @@
                         <td><strong>{{ m[3] if m[3] else m[1] }}</strong></td>
                         <td style="color: var(--accent-blue);">{{ m[1] }}</td>
                         <td style="color: var(--text-muted);">{{ m[4] if m[4] else 'غير مسجل' }}</td>
-                        <td><span style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); padding: 3px 8px; border-radius: 4px; font-size: 13px;">{{ m[2] }}</span></td>
+                        <td><span style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); padding: 3px 8px; border-radius: 4px; font-size: 12px;">{{ m[2] }}</span></td>
                         <td>
                             <a href="{{ url_for('remove_member', member_id=m[0]) }}" class="btn-reject" onclick="return confirm('هل تريد حقاً إزالة هذا المستخدم من المجموعة؟');">إزالة من المجموعة 🚫</a>
                         </td>
@@ -974,7 +1089,7 @@
                             <td>{{ ref[2] }}</td>
                             <td><a href="{{ ref[3] }}" target="_blank" style="color: var(--accent-blue);">رابط المرجع 🔗</a></td>
                             <td>
-                                <div style="display: flex; gap: 6px;">
+                                <div style="display: flex; gap: 6px; flex-wrap: nowrap;">
                                     <button type="button" class="btn-edit"
                                         data-id="{{ ref[0] }}"
                                         data-group-id="{{ ref[4] if ref|length > 4 and ref[4] is not none else '' }}"
@@ -996,7 +1111,7 @@
     </div>
 
     <div id="sec-ratings" class="section-box section-anchor" style="border-color: var(--accent-green);">
-        <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: nowrap;">
             <h3 style="margin: 0;">⭐ تقييمات وآراء الأعضاء في المنصة ({{ ratings_list|length }})</h3>
             <button type="button" class="btn-reply" onclick="window.location.reload()">🔄 تحديث التقييمات</button>
         </div>
@@ -1106,7 +1221,7 @@
                 <td>${escapeHtmlAttr(item.desc || '')}</td>
                 <td style="color: var(--accent-green); font-weight: bold;">${parseInt(item.price, 10) || 0} E-Coin</td>
                 <td>
-                    <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 6px; flex-wrap: nowrap;">
                         <button type="button" class="btn-edit" onclick="openEditMarketItemModal(${item.id})">تعديل ✏️</button>
                         <button type="button" class="btn-delete" onclick="deleteAdminMarketItem(${item.id})">حذف 🗑️</button>
                     </div>
@@ -1338,11 +1453,11 @@
             card.className = 'join-q-item-card';
 
             const span = document.createElement('span');
-            span.style.cssText = 'font-size: 14px; color: var(--text-main); flex: 1;';
+            span.style.cssText = 'font-size: 13px; color: var(--text-main); flex: 1; min-width: 0;';
             span.textContent = `${index + 1}. ${q.text}`;
 
             const actions = document.createElement('div');
-            actions.style.cssText = 'display: flex; gap: 6px;';
+            actions.style.cssText = 'display: flex; gap: 6px; flex-shrink: 0;';
 
             const editBtn = document.createElement('button');
             editBtn.type = 'button';
@@ -1880,11 +1995,11 @@
             const row = document.createElement('div');
             row.className = 'welcome-notif-card';
             const span = document.createElement('span');
-            span.style.cssText = 'font-size: 14px; color: var(--text-main); flex: 1;';
+            span.style.cssText = 'font-size: 13px; color: var(--text-main); flex: 1; min-width: 0;';
             span.textContent = item.text;
 
             const actions = document.createElement('div');
-            actions.style.cssText = 'display: flex; gap: 6px;';
+            actions.style.cssText = 'display: flex; gap: 6px; flex-shrink: 0;';
 
             const editBtn = document.createElement('button');
             editBtn.type = 'button';
@@ -2058,7 +2173,7 @@
                         <td>${escapeHtmlAttr(ref.description || '')}</td>
                         <td><a href="${escapeHtmlAttr(ref.link || '#')}" target="_blank" style="color: var(--accent-blue);">رابط المرجع 🔗</a></td>
                         <td>
-                            <div style="display: flex; gap: 6px;">
+                            <div style="display: flex; gap: 6px; flex-wrap: nowrap;">
                                 <button type="button" class="btn-edit"
                                     data-id="${escapeHtmlAttr(ref.id)}"
                                     data-group-id="${ref.group_id !== null && ref.group_id !== undefined ? escapeHtmlAttr(ref.group_id) : ''}"

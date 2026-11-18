@@ -2,20 +2,94 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>الرد على المستخدم - AuraCode</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 24px 16px;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .reply-box {
+            max-width: 440px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        h2 {
+            margin-top: 0;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        label {
+            display: inline-block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            max-width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #888;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        button[type="submit"] {
+            padding: 10px 18px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 16px;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 16px 12px;
+            }
+
+            h2 {
+                font-size: 18px;
+            }
+
+            input[type="text"],
+            textarea {
+                padding: 9px;
+                font-size: 13px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h2>الرد على: {{ email }} - AuraCode</h2>
-    <form method="POST">
-        <label>عنوان الرسالة:</label><br>
-        <input type="text" name="subject" value="رد على استفسارك - AuraCode" required style="width: 100%; max-width: 400px;"><br><br>
-        
-        <label>نص الرد:</label><br>
-        <textarea name="message" rows="6" required style="width: 100%; max-width: 400px;"></textarea><br><br>
-        
-        <button type="submit">إرسال الرد</button>
-    </form>
-    <br>
-    <a href="/admin/messages">العودة للرسائل</a>
+    <div class="reply-box">
+        <h2>الرد على: {{ email }} - AuraCode</h2>
+        <form method="POST">
+            <label>عنوان الرسالة:</label><br>
+            <input type="text" name="subject" value="رد على استفسارك - AuraCode" required style="width: 100%; max-width: 400px;"><br><br>
+            
+            <label>نص الرد:</label><br>
+            <textarea name="message" rows="6" required style="width: 100%; max-width: 400px;"></textarea><br><br>
+            
+            <button type="submit">إرسال الرد</button>
+        </form>
+        <br>
+        <a href="/admin/messages" class="back-link">العودة للرسائل</a>
+    </div>
 </body>
 </html>

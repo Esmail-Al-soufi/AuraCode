@@ -23,10 +23,15 @@ app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 if os.environ.get('FLASK_ENV') == 'production':
     app.config['SESSION_COOKIE_SECURE'] = True
-app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
+app.config['MAX_CONTENT_LENGTH'] = 25 * 1024 * 1024
 
-# الامتدادات المسموحة لرفع الملفات
-ALLOWED_IMAGE_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp', 'avif'}
+# الامتدادات المسموحة لرفع الصور (يدعم جميع صيغ الصور الشائعة والحديثة)
+ALLOWED_IMAGE_EXTENSIONS = {
+    'png', 'jpg', 'jpeg', 'jpe', 'jfif', 'pjpeg', 'pjp',
+    'gif', 'webp', 'avif', 'bmp', 'dib',
+    'tif', 'tiff', 'ico', 'cur',
+    'heic', 'heif', 'svg', 'svgz', 'apng', 'raw', 'cr2', 'nef', 'orf', 'sr2'
+}
 ALLOWED_MEDIA_EXTENSIONS = ALLOWED_IMAGE_EXTENSIONS | {
     'mp4', 'avi', 'mov', 'webm', 'mkv',
     'mp3', 'wav', 'ogg', 'm4a',
@@ -65,15 +70,25 @@ mail = Mail(app)
 s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 
-def _save_uploaded_file(file_storage, allowed_extensions, default_name):
+def _save_uploaded_file(file_storage, allowed_extensions, default_name, allow_any_image=False):
     if not file_storage or not file_storage.filename:
         return default_name, None
-    safe_name = secure_filename(file_storage.filename)
-    if not safe_name or '.' not in safe_name:
-        return None, "امتداد الملف غير مسموح به."
-    ext = safe_name.rsplit('.', 1)[1].lower()
-    if ext not in allowed_extensions:
+
+    raw_name = file_storage.filename.strip()
+    mimetype = (file_storage.mimetype or '').lower()
+    ext = raw_name.rsplit('.', 1)[1].lower() if '.' in raw_name else ''
+
+    if allow_any_image and mimetype.startswith('image/'):
+        safe_ext = ext if ext else 'png'
+        unique_filename = f"{uuid.uuid4().hex}.{safe_ext}"
+        upload_dir = os.path.join(BASE_DIR, 'static')
+        os.makedirs(upload_dir, exist_ok=True)
+        file_storage.save(os.path.join(upload_dir, unique_filename))
+        return unique_filename, None
+
+    if not ext or ext not in allowed_extensions:
         return None, "نوع الملف المرفوع غير مسموح به."
+
     unique_filename = f"{uuid.uuid4().hex}.{ext}"
     upload_dir = os.path.join(BASE_DIR, 'static')
     os.makedirs(upload_dir, exist_ok=True)
@@ -1041,7 +1056,7 @@ def register():
 
         hashed_password = generate_password_hash(password)
 
-        filename, upload_err = _save_uploaded_file(file, ALLOWED_IMAGE_EXTENSIONS, 'default.png')
+        filename, upload_err = _save_uploaded_file(file, ALLOWED_IMAGE_EXTENSIONS, 'default.png', allow_any_image=True)
         if upload_err:
             return upload_err, 400
 
@@ -1127,7 +1142,7 @@ def update_profile():
 
         final_nickname = new_nickname.strip() if new_nickname and new_nickname.strip() else old_nickname
 
-        saved_pic, upload_err = _save_uploaded_file(file, ALLOWED_IMAGE_EXTENSIONS, None)
+        saved_pic, upload_err = _save_uploaded_file(file, ALLOWED_IMAGE_EXTENSIONS, None, allow_any_image=True)
         if upload_err:
             return upload_err, 400
         if saved_pic:
@@ -1414,14 +1429,14 @@ def send_message():
     media_type = 'text'
     has_media = False
     if media_file and media_file.filename:
-        saved_name, upload_err = _save_uploaded_file(media_file, ALLOWED_MEDIA_EXTENSIONS, None)
+        saved_name, upload_err = _save_uploaded_file(media_file, ALLOWED_MEDIA_EXTENSIONS, None, allow_any_image=True)
         if upload_err:
             return jsonify({'status': 'error', 'message': upload_err}), 400
         if saved_name:
             has_media = True
             message = saved_name
             ext = saved_name.rsplit('.', 1)[1].lower()
-            if ext in ALLOWED_IMAGE_EXTENSIONS:
+            if ext in ALLOWED_IMAGE_EXTENSIONS or (media_file.mimetype or '').lower().startswith('image/'):
                 media_type = 'image'
             elif ext in ('mp4', 'avi', 'mov', 'webm', 'mkv'):
                 media_type = 'video'
@@ -1811,7 +1826,7 @@ def add_group():
     group_desc = request.form.get('group_desc')
     icon_file = request.files.get('group_icon')
 
-    icon_filename, upload_err = _save_uploaded_file(icon_file, ALLOWED_IMAGE_EXTENSIONS, 'default_group.png')
+    icon_filename, upload_err = _save_uploaded_file(icon_file, ALLOWED_IMAGE_EXTENSIONS, 'default_group.png', allow_any_image=True)
     if upload_err:
         flash(upload_err, "error")
         return redirect(url_for('admin_group_requests'))
@@ -1832,7 +1847,7 @@ def edit_group():
     group_desc = request.form.get('group_desc')
     icon_file = request.files.get('group_icon')
 
-    saved_icon, upload_err = _save_uploaded_file(icon_file, ALLOWED_IMAGE_EXTENSIONS, None)
+    saved_icon, upload_err = _save_uploaded_file(icon_file, ALLOWED_IMAGE_EXTENSIONS, None, allow_any_image=True)
     if upload_err:
         flash(upload_err, "error")
         return redirect(url_for('admin_group_requests'))
@@ -2012,7 +2027,7 @@ def update_pic():
         return redirect(url_for('login'))
 
     file = request.files.get('profile_pic')
-    saved_pic, upload_err = _save_uploaded_file(file, ALLOWED_IMAGE_EXTENSIONS, None)
+    saved_pic, upload_err = _save_uploaded_file(file, ALLOWED_IMAGE_EXTENSIONS, None, allow_any_image=True)
     if upload_err:
         return upload_err, 400
 

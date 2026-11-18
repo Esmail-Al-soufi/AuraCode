@@ -77,6 +77,7 @@
             justify-content: center;
             align-items: center;
             padding: 20px 0;
+            overflow-x: hidden;
         }
 
         .wrapper {
@@ -322,27 +323,65 @@
             margin-top: 2px;
         }
 
+        /* الحفاظ على نفس توزيع وهيئة اللابتوب على شاشة الهاتف */
         @media (max-width: 600px) {
-  .main-logo {
-    width: 150px;
-    height: 150px;
-  }
+            body {
+                padding: 16px 0;
+            }
 
-  .wrapper {
-    padding: 24px 20px;
-    border-radius: 16px;
-  }
+            .wrapper {
+                width: 90%;
+                max-width: 370px;
+                padding: 26px 22px;
+                border-radius: 18px;
+                margin-top: 16px !important;
+            }
 
-  .developer-card {
-    position: static !important;
-    width: fit-content !important;
-    margin: 0 auto 16px auto !important;
-  }
+            .profile-avatar-label {
+                width: 90px;
+                height: 90px;
+            }
 
-  .page-stack {
-    padding-bottom: 24px;
-  }
-}
+            .input-group {
+                margin-bottom: 1rem;
+            }
+
+            .input-group input {
+                padding: 0.72rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .developer-card {
+                position: fixed !important;
+                bottom: 14px !important;
+                left: 14px !important;
+                padding: 8px 12px !important;
+                border-radius: 10px !important;
+            }
+
+            .dev-title {
+                font-size: 0.68rem !important;
+            }
+
+            .dev-name {
+                font-size: 0.85rem !important;
+            }
+
+            .dev-phone {
+                font-size: 0.74rem !important;
+            }
+
+            .page-stack {
+                padding-bottom: 86px;
+                gap: 12px;
+            }
+
+            .site-footer {
+                width: 90%;
+                max-width: 370px;
+                padding: 12px 14px;
+            }
+        }
     </style>
 </head>
 <body>

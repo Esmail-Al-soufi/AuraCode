@@ -26,6 +26,7 @@
         }
 
         * {
+            box-sizing: border-box;
             transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease !important;
         }
 
@@ -61,15 +62,43 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: nowrap;
+            gap: 10px;
             border-bottom: 1px solid var(--border-color);
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             z-index: 100;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+            flex-shrink: 1;
+        }
+
+        .header-back-link {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .header-group-title {
+            margin: 0;
+            color: var(--accent-green);
+            font-size: 15px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .header-status-badges {
             display: flex;
             align-items: center;
             gap: 15px;
+            flex-shrink: 0;
         }
 
         .badge-box {
@@ -81,6 +110,22 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            white-space: nowrap;
+        }
+
+        .sidebar-toggle-btn {
+            background: var(--border-color);
+            color: var(--text-main);
+            border: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
 
         .chat-container {
@@ -97,7 +142,6 @@
             flex-direction: column;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            box-sizing: border-box;
             z-index: 10;
         }
 
@@ -159,12 +203,14 @@
             -webkit-backdrop-filter: blur(10px);
             border-top: 1px solid var(--border-color);
             display: flex;
+            flex-wrap: nowrap;
             gap: 10px;
             align-items: center;
         }
 
         .chat-input-area input[type="text"] {
             flex: 1;
+            min-width: 0;
             padding: 12px;
             background: rgba(30, 41, 59, 0.4);
             border: 1px solid var(--border-color);
@@ -188,6 +234,8 @@
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .btn-send:hover { opacity: 0.9; }
@@ -203,6 +251,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
         .media-upload-label:hover { border-color: var(--accent-blue); background: rgba(30, 41, 59, 0.8); }
 
@@ -251,37 +300,78 @@
         input:checked + .slider { background-color: var(--accent-blue); }
         input:checked + .slider:before { transform: translateX(24px); }
 
+        /* الحفاظ على نفس توزيع وهيئة اللابتوب على شاشة الهاتف */
         @media (max-width: 768px) {
-  header {
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 8px 12px;
-  }
+            header {
+                flex-wrap: nowrap;
+                gap: 6px;
+                padding: 8px 10px;
+            }
 
-  .header-status-badges {
-    gap: 8px;
-  }
+            .header-brand {
+                gap: 6px;
+            }
 
-  .chat-container {
-    margin: 8px;
-    border-radius: 10px;
-  }
+            .header-back-link {
+                font-size: 12px;
+            }
 
-  .message-bubble {
-    max-width: 85%;
-    padding: 10px 12px;
-  }
+            .header-group-title {
+                font-size: 12.5px;
+                max-width: 110px;
+            }
 
-  .chat-input-area {
-    padding: 10px;
-    gap: 6px;
-  }
+            .header-status-badges {
+                gap: 6px;
+            }
 
-  .btn-send {
-    padding: 9px 14px;
-    font-size: 13px;
-  }
-}
+            .badge-box {
+                padding: 4px 8px;
+                font-size: 11px;
+                gap: 4px;
+            }
+
+            .sidebar-toggle-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 15px;
+            }
+
+            .chat-container {
+                margin: 8px;
+                border-radius: 10px;
+            }
+
+            .chat-messages {
+                padding: 12px;
+                gap: 10px;
+            }
+
+            .message-bubble {
+                max-width: 72%;
+                padding: 9px 12px;
+            }
+
+            .chat-input-area {
+                padding: 8px 10px;
+                gap: 6px;
+            }
+
+            .chat-input-area input[type="text"] {
+                padding: 8px 10px;
+                font-size: 12.5px;
+            }
+
+            .media-upload-label {
+                padding: 8px 10px;
+                font-size: 14px;
+            }
+
+            .btn-send {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -290,10 +380,10 @@
     <canvas id="matrixCanvas"></canvas>
 
     <header>
-      <div style="display: flex; align-items: center; gap: 10px;">
-          <a href="/dashboard" style="color: var(--accent-blue); text-decoration: none; font-weight: bold; font-size: 14px;">← لوحة التحكم</a>
+      <div class="header-brand">
+          <a href="/dashboard" class="header-back-link">← لوحة التحكم</a>
           <span style="color: var(--border-color);">|</span>
-          <h3 style="margin: 0; color: var(--accent-green); font-size: 15px;">💬 {{ group_name }}</h3>
+          <h3 class="header-group-title">💬 {{ group_name }}</h3>
       </div>
 
       <!-- مؤشرات الرصيد والعداد العلوي في صفحة المحادثة -->
@@ -310,7 +400,7 @@
       </div>
 
       <div>
-        <button onclick="toggleSidebar()" style="background: var(--border-color); color: var(--text-main); border: none; width: 38px; height: 38px; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center;" title="الإعدادات">☰</button>
+        <button type="button" class="sidebar-toggle-btn" onclick="toggleSidebar()" title="الإعدادات">☰</button>
       </div>
     </header>
 
@@ -365,7 +455,7 @@
             <input type="file" id="mediaFileInput" style="display: none;" onchange="uploadMediaMessage(this)">
             
             <input type="text" id="messageInput" placeholder="اكتب رسالتك هنا..." onkeypress="handleKeyPress(event)">
-            <button class="btn-send" onclick="sendTextMessage()">إرسال 🚀</button>
+            <button type="button" class="btn-send" onclick="sendTextMessage()">إرسال 🚀</button>
         </div>
     </div>
 

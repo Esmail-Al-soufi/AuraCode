@@ -2,10 +2,98 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة التحكم - AuraCode</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 16px;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .auth-box {
+            text-align: center;
+            margin-top: 40px;
+            max-width: 460px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .auth-box input {
+            padding: 9px 12px;
+            border-radius: 6px;
+            border: 1px solid #888;
+            font-size: 14px;
+            max-width: 100%;
+        }
+
+        .auth-box button {
+            padding: 9px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .table-wrap {
+            width: 80%;
+            max-width: 100%;
+            margin: 20px auto 30px auto;
+            overflow-x: auto;
+        }
+
+        .messages-table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 520px;
+        }
+
+        .messages-table th,
+        .messages-table td {
+            padding: 8px 10px;
+            text-align: right;
+            word-break: break-word;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px 10px;
+            }
+
+            .auth-box {
+                margin-top: 24px;
+            }
+
+            .auth-box h2 {
+                font-size: 19px;
+            }
+
+            .table-wrap {
+                width: 100%;
+                margin-top: 20px;
+            }
+
+            .messages-table {
+                min-width: 440px;
+                font-size: 12.5px;
+            }
+
+            .messages-table th,
+            .messages-table td {
+                padding: 6px 8px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div style="text-align: center; margin-top: 50px;">
+    <div class="auth-box">
         <h2>إدارة الرسائل - AuraCode</h2>
         
         <form method="POST" action="/admin/messages">
@@ -19,22 +107,24 @@
     </div>
 
     {% if messages %}
-        <table border="1" style="width: 80%; margin: 20px auto; margin-top: 30px;">
-            <tr>
-                <th>الاسم</th>
-                <th>البريد</th>
-                <th>الموضوع</th>
-                <th>الرسالة</th>
-            </tr>
-            {% for msg in messages %}
-            <tr>
-                <td>{{ msg[1] }}</td>
-                <td>{{ msg[2] }}</td>
-                <td>{{ msg[3] }}</td>
-                <td>{{ msg[4] }}</td>
-            </tr>
-            {% endfor %}
-        </table>
+        <div class="table-wrap">
+            <table border="1" class="messages-table">
+                <tr>
+                    <th>الاسم</th>
+                    <th>البريد</th>
+                    <th>الموضوع</th>
+                    <th>الرسالة</th>
+                </tr>
+                {% for msg in messages %}
+                <tr>
+                    <td>{{ msg[1] }}</td>
+                    <td>{{ msg[2] }}</td>
+                    <td>{{ msg[3] }}</td>
+                    <td>{{ msg[4] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
     {% endif %}
 </body>
 </html>
