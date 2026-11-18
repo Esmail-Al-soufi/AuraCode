@@ -860,6 +860,67 @@
     text-align: center;
     line-height: 1.7;
   }
+
+  @media (max-width: 768px) {
+  body {
+    padding-bottom: 105px;
+  }
+
+  header {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 12px;
+  }
+
+  .logo-container {
+    order: 3;
+    flex: 1 1 100%;
+    margin-top: 4px;
+  }
+
+  .news-ticker {
+    max-width: 100%;
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+
+  .header-right-section {
+    gap: 8px;
+  }
+
+  .coin-badge {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  .floating-bottom-nav {
+    width: calc(100% - 16px);
+    max-width: 460px;
+    bottom: 10px;
+    padding: 8px 10px;
+    gap: 6px;
+    justify-content: space-between;
+    border-radius: 26px;
+  }
+
+  .circle-tab-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+
+  .tab-content {
+    padding: 14px 12px;
+  }
+
+  .section-box {
+    padding: 16px;
+  }
+}
+#farmNoticeModal {
+  display: none !important;
+}
 </style>
 </head>
 <body>
@@ -914,21 +975,6 @@
     </div>
   </div>
 </div>
-
-<div id="farmNoticeModal" class="modal-overlay" style="display: none;">
-  <div class="modal-box">
-    <div style="font-size: 45px; margin-bottom: 10px;">🌱</div>
-    <h3 style="color: var(--accent-green); margin: 0 0 10px 0; font-size: 20px;">تنبيه هـام: الحظيرة الخضراء!</h3>
-    <p style="color: var(--text-main); font-size: 14px; line-height: 1.6; margin-bottom: 20px;">
-      أهلاً بك يا <strong>{{ user_nickname }}</strong> في <strong>AuraCode</strong>! إذا أردت زيادة رصيدك عليك أن تزرعه في الحظيرة الخضراء؛ ابدأ بالدراسة لزراعة نباتاتك واكتساب عملات <strong>E-Coin</strong> لاستخدامها في الذكاء الاصطناعي والمتجر!
-    </p>
-    <div style="display: flex; gap: 10px; justify-content: center;">
-      <button onclick="goToFarmTab()" class="btn-primary" style="background: linear-gradient(135deg, #059669, #10b981); padding: 10px 20px;">الآن 🌱</button>
-      <button onclick="closeFarmModal()" style="background: var(--bg-dark); color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 15px; cursor: pointer; font-weight: bold;">لاحقاً</button>
-    </div>
-  </div>
-</div>
-
 <header>
   <div class="profile-section">
     <div class="profile">
