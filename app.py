@@ -2051,6 +2051,9 @@ if not app.debug or os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
         conn.commit()
         conn.close()
 
+@app.route('/7ddd98a450ab.html')
+def google_verify():
+    return "google-site-verification: 7ddd98a450ab.html", 200, {'Content-Type': 'text/html'}
 
 if __name__ == '__main__':
     app.run(debug=True)
