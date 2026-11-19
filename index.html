@@ -3,7 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول - AuraCode</title>
+
+    <!-- 1. عنوان الموقع والوصف الذي يظهر في نتائج بحث قوقل -->
+    <title>AuraCode | منصة تعليم البرمجة والتعلم التفاعلي</title>
+    <meta name="description" content="منصة AuraCode التعليمية التفاعلية لتعلم لغات البرمجة (Python, C++, C#, SQL, Web)، تنفيذ الأكواد مباشرة، والانضمام لمجموعات الدراسة التقنية.">
+    <meta name="keywords" content="AuraCode, منصة تعليم البرمجة, تعلم بايثون, سي بلس بلس, تصميم ويب, تنفيذ الأكواد, منصة تعليمية">
+    <meta name="author" content="Esmail Al-Suofi">
+
+    <!-- 2. الشعار (Favicon) المأخوذ من /static/20.jpg ليظهر بجانب اسم الموقع في بحث قوقل -->
+    <link rel="icon" type="image/jpeg" href="/static/20.jpg">
+    <link rel="apple-touch-icon" href="/static/20.jpg">
+
+    <!-- 3. وسوم المشاركة الاجتماعية (Open Graph) -->
+    <meta property="og:site_name" content="AuraCode">
+    <meta property="og:title" content="AuraCode | منصة تعليم البرمجة والتعلم التفاعلي">
+    <meta property="og:description" content="منصة AuraCode التعليمية التفاعلية لتعلم لغات البرمجة وتنفيذ الأكواد مباشرة والانضمام لمجموعات الدراسة التقنية.">
+    <meta property="og:image" content="https://auracode-production-441c0d67.up.railway.app/static/20.jpg">
+    <meta property="og:url" content="https://auracode-production-441c0d67.up.railway.app/">
+    <meta property="og:type" content="website">
+
+    <!-- 4. كود تعريف اسم الموقع الرسمي لقوقل (Structured Data) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "AuraCode",
+      "alternateName": "منصة AuraCode التعليمية",
+      "url": "https://auracode-production-441c0d67.up.railway.app/"
+    }
+    </script>
+
+    <!-- 5. ضع هنا كود التحقق من Google Search Console بعد نسخه من خيار HTML tag -->
+    <!-- <meta name="google-site-verification" content="ضع_كود_التحقق_هنا" /> -->
+
     <style>
         .animated-letters-bg {
             position: fixed;
@@ -96,7 +128,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0 auto 2rem auto;
+            margin: 0 auto 1.2rem auto;
             position: relative;
         }
 
@@ -129,6 +161,25 @@
 
         .logo-container:hover {
             transform: scale(1.05);
+        }
+
+        /* عنوان ووصف تعريفي بسيط داخل الصفحة لمساعدة قوقل والزوار */
+        .seo-intro {
+            text-align: center;
+            margin-bottom: 1.4rem;
+        }
+
+        .seo-intro h1 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-bottom: 4px;
+        }
+
+        .seo-intro p {
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            line-height: 1.5;
         }
 
         .input-group {
@@ -445,6 +496,11 @@
         <div class="wrapper">
             <div class="logo-container" id="mainLogo">
                 <img src="/static/20.jpg" alt="AuraCode Logo" class="main-logo">
+            </div>
+
+            <div class="seo-intro">
+                <h1>AuraCode</h1>
+                <p>منصة تعليم البرمجة التفاعلية، تنفيذ الأكواد مباشرة، ومجموعات الدراسة التقنية.</p>
             </div>
 
             <form action="{{ url_for('login') }}" method="POST">
